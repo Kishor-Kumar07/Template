@@ -1,7 +1,12 @@
 import React, { Component } from "react";
 import {Row,Col,Input, Label, Button} from 'reactstrap'
 import Partb from './partb'
- 
+import Math from './math' 
+import MathJax from 'react-mathjax2'
+import { EditableMathField } from "react-mathquill";
+import 'katex/dist/katex.min.css';
+import { InlineMath, BlockMath } from 'react-katex';
+import {InlineTex} from 'react-tex'
 class Parta extends Component {
   constructor(){
     super();
@@ -23,13 +28,13 @@ class Parta extends Component {
     
     }
   }
+
   //const [inputList, setInputList] = useState([{ question: "", mark: "" }]);
- 
   // handle input change
    handleInputChange = (e, index) => {
     const { name, value } = e.target;
     const list = [...this.state.qp];
-    list[index][name] = value;
+    list[index][name] = value; 
     this.setState({qp:list})
   };
 
@@ -98,6 +103,8 @@ class Parta extends Component {
         <Col md={7}>
             <Input name="question" className="form-control" placeholder="Questions"
                 value={x.question} onChange={e => this.handleInputChange(e, id)}/>
+             <Math ques={x.question}/>
+
         </Col>
         <Col md={1}>
          
@@ -111,7 +118,7 @@ class Parta extends Component {
             { <Button className="form-control" color="primary" onClick={this.handleAddClick}>Add</Button>}
         </Col>
        </Row>
-     {this.state.qp[id].subqp.map((x,subid)=><div><Row className="form-group" key={id}>
+     {this.state.qp[id].subqp.map((xb,subid)=><div><Row className="form-group" key={id}>
         <Col md={1}>
         
             {
@@ -122,12 +129,13 @@ class Parta extends Component {
         </Col>
         <Col md={6}>
             <Input name="question" className="form-control" placeholder="Questions"
-                value={x.question} onChange={e => this.handleInputsubChange(e, id, subid)}/>
+                value={xb.question} onChange={e => this.handleInputsubChange(e, id, subid)}/>
+                <Math ques={xb.question}/>
         </Col>
         <Col md={1}>
          
             <Input type="number" className="form-control ml10" name="mark" placeholder="M"
-                value={x.mark} onChange={e => this.handleInputsubChange(e, id)}/>
+                value={xb.mark} onChange={e => this.handleInputsubChange(e, id)}/>
         </Col>
        </Row></div>)}
        

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import {Row,Col,Input, Label, Button} from 'reactstrap'
- 
+import Math from './math' 
 class Partc extends Component {
   constructor(){
     super();
@@ -91,6 +91,7 @@ class Partc extends Component {
           <Col md={7}>
               <Input name="question" className="form-control" placeholder="Questions"
                   value={x.question} onChange={e => this.handleInputChange(e, id)}/>
+                  <Math ques={x.question}/>
           </Col>
           <Col md={1}>
            
@@ -106,10 +107,10 @@ class Partc extends Component {
           </Col>
          </Row>
          {/* {console.log(this.state.qp[0].subqp.length)} */}
-       {this.state.qp[id].subqp.map((x,subid)=><div><Row className="form-group" key={id}>
+       {this.state.qp[id].subqp.map((xb,subid)=><div><Row className="form-group" key={id}>
           <Col md={1}>
           
-              {this.state.qp.length !== 1 && 
+              {
               <Button className="mr10" color="danger" onClick={() => this.handleRemovesubClick(id)}>Del</Button>}
           </Col>
           <Col md={1}>
@@ -117,12 +118,13 @@ class Partc extends Component {
           </Col>
           <Col md={7}>
               <Input name="question" className="form-control" placeholder="Questions"
-                  value={x.question} onChange={e => this.handleInputsubChange(e, id)}/>
+                  value={xb.question} onChange={e => this.handleInputsubChange(e, id,subid)}/>
+                  <Math ques={xb.question}/>
           </Col>
           <Col md={1}>
            
               <Input type="number" className="form-control ml10" name="mark" placeholder="M"
-                  value={x.mark} onChange={e => this.handleInputsubChange(e, id)}/>
+                  value={xb.mark} onChange={e => this.handleInputsubChange(e, id,subid)}/>
           </Col>
          </Row></div>)}
          </div>

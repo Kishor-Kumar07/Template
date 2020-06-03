@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import {Form,Container,Row,Col,Input} from 'reactstrap'
 import Parta from './parta'
-
-
 import './App.css';
 
 class template extends Component {
@@ -50,7 +48,6 @@ class template extends Component {
           <hr/>
         </Form>
       </Container>
-   
     )
   }
   
