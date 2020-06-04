@@ -91,7 +91,7 @@ class Partb extends Component {
         <Col md={1}>
         
             {this.state.qp.length !== 1 && 
-            <Button className="mr10" color="danger" onClick={() => this.handleRemoveClick(id)}>Del</Button>}
+            <Button id="button" className="partabut" color="danger" onClick={() => this.handleRemoveClick(id)}>Del</Button>}
         </Col>
         <Col md={1}>
             <Label type="number" className="form-control" id="q_no" name="id">{this.props.id+1+id}</Label>
@@ -107,10 +107,10 @@ class Partb extends Component {
                 value={x.mark} onChange={e => this.handleInputChange(e, id)}/>
         </Col>
         <Col md={1}>
-            {<Button className="form-control" onClick={()=>this.handleSubClick(id)}>Sub</Button>}
+            {<Button id="button" className="partabut" onClick={()=>this.handleSubClick(id)}>Sub</Button>}
         </Col>
         <Col md={1}>
-            { <Button className="form-control" color="primary" onClick={this.handleAddClick}>Add</Button>}
+            { <Button id="button" className="partabut" color="primary" onClick={this.handleAddClick}>Add</Button>}
             {/* {console.log(this.state.qp[id].subqp.length)} */}
         </Col>
        </Row>
@@ -119,7 +119,7 @@ class Partb extends Component {
         <Col md={1}>
         
             {
-            <Button className="mr10" color="danger" onClick={() => this.handleRemovesubClick(id)}>Del</Button>}
+            <Button id="button" className="partabut" color="danger" onClick={() => this.handleRemovesubClick(id)}>Del</Button>}
         </Col>
         <Col md={1}>
             <Label type="number" className="form-control" id="q_no" name="id">{this.props.id+1+id+"."+this.state.sub[subid]+")"}</Label>

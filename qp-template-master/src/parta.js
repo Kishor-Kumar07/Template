@@ -5,6 +5,7 @@ import Math from './math'
 import MathJax from 'react-mathjax2'
 import { EditableMathField } from "react-mathquill";
 import 'katex/dist/katex.min.css';
+import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
 import { InlineMath, BlockMath } from 'react-katex';
 import {InlineTex} from 'react-tex'
 class Parta extends Component {
@@ -95,7 +96,7 @@ class Parta extends Component {
         <Col md={1}>
         
             {this.state.qp.length !== 1 && 
-            <Button className="mr10" color="danger" onClick={() => this.handleRemoveClick(id)}>Del</Button>}
+            <Button id ="button" className="partabut" color="danger" onClick={() => this.handleRemoveClick(id)}>Del</Button>}
         </Col>
         <Col md={1}>
             <Label type="number" className="form-control" id="q_no" name="id">{id+1}</Label>
@@ -112,17 +113,17 @@ class Parta extends Component {
                 value={x.mark} onChange={e => this.handleInputChange(e, id)}/>
         </Col>
         <Col md={1}>
-            {<Button className="form-control" onClick={()=>this.handleSubClick(id)}>Sub</Button>}
+            {<Button id ="button" className="partabut" onClick={()=>this.handleSubClick(id)}>Sub</Button>}
         </Col>
         <Col md={1}>
-            { <Button className="form-control" color="primary" onClick={this.handleAddClick}>Add</Button>}
+            { <Button id="button" className="partabut" color="primary" onClick={this.handleAddClick}>Add</Button>}
         </Col>
        </Row>
      {this.state.qp[id].subqp.map((xb,subid)=><div><Row className="form-group" key={id}>
         <Col md={1}>
         
             {
-            <Button className="mr10" color="danger" onClick={() => this.handleRemovesubClick(id,subid)}>Del</Button>}
+            <Button id="button" className="partabut" color="danger" onClick={() => this.handleRemovesubClick(id,subid)}>Del</Button>}
         </Col>
         <Col md={1}>
             <Label type="number" className="form-control" id="q_no" name="id">{id+1+"."+this.state.sub[subid]+")"}</Label>
