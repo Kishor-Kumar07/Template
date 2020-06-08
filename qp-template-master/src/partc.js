@@ -88,7 +88,7 @@ class Partc extends Component {
     this.setState({ open: true });
 }
   render(){
-
+    {console.log(this.props.header)}
   return (
     <div> 
     <Row className="form-group row-align">
@@ -109,7 +109,7 @@ class Partc extends Component {
               <div>
         <Row className="form-group" key={id}>
               <Col md={1}>
-                  {this.state.qp.length !== 1 && 
+                  {this.state.qp.length !== 1 && x.subqp.length<1 &&
                   <Button id ="button" className="partabut" color="danger" onClick={() => this.handleRemoveClick(id)}>Del</Button>}
               </Col>
               <Col md={1}>
@@ -170,7 +170,7 @@ class Partc extends Component {
           style={{overflow:'scroll'}}
         >
           
-         <Scroll.Element className="element" style={{overflow:'scroll',position:'relative',height:'650px'}}> 
+         <Scroll.Element className="element" style={{overflow:'scroll',position:'relative',height:'620px'}}> 
           <div>
             <a className="close" onClick={this.closeModal}>
               &times;
@@ -184,6 +184,42 @@ class Partc extends Component {
     
         >
             <div>
+            
+            <Row className="form-group row-align">
+              <Col md={3} className=" offset-md-9">
+                <Label >{this.props.header.date}</Label>
+              </Col>
+          </Row>
+          <Row className="form-group row-align">
+              <Col md={6} className=" offset-md-1">
+              <Label >{this.props.header.subject}</Label>
+              </Col>
+          </Row>
+          <Row className="form-group row-align">
+              <Col md={6} className=" offset-md-3">
+              <Label >{this.props.header.semester}</Label>
+              </Col>
+          </Row>
+          <Row className="form-group row-align">
+              <Col md={6} className=" offset-md-1">
+              <Label >{this.props.header.course}</Label>
+              </Col>
+          </Row>
+          <Row className="form-group row-align">
+              <Col md={6} className=" offset-md-3">
+              <Label >{this.props.header.regulation}</Label>
+              </Col>
+          </Row>
+          <Row className="form-group">
+              <Col md={3} className="offset-md-1">
+              <Label >{this.props.header.time}</Label>
+              </Col>
+              <Col md={1} className="offset-md-6">
+              <Label >{this.props.header.marks}</Label>
+              
+              </Col>
+          </Row>
+
             <Row className="form-group row-align">
                         <Col md={3} className="offset-md-4">
                             <Label >PART-A</Label>
@@ -199,12 +235,12 @@ class Partc extends Component {
                 <div>
                 <Row>
                 <Col md={1}>
-                {this.props.sab.qp[id].subqp.length!==0?<Label>
+                {this.props.sab.qp[id].subqp.length!==0?<Label style={{textAlign:'right'}}>
                   {1+id+"."+this.state.sub[0]+")"}</Label>
-                :<Label>{1+id}</Label>}
+                :<Label style={{textAlign:'right'}}>{1+id}</Label>}
                  
               </Col>
-                  <Col md={8}>
+                  <Col md={10}>
                   
                       <Label><Math ques={x.question}/></Label>
               </Col>

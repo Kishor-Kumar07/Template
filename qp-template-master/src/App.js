@@ -9,14 +9,23 @@ class template extends Component {
   constructor(){
     super();
     this.state={
-      header:[
+      header:
         {
-        date:"",
+        date:null,
+        subject:null,
+        semester:null,
+        course:null,
+        regulation:null,
+        time:null,
+        marks:null
         }
-      ]
+      
     }
   }
-  
+  handleChange = (e) => {
+    const { name, value } = e.target;
+    this.state.header[name] = value; 
+  };
 
     
 
@@ -33,22 +42,22 @@ class template extends Component {
           </Row>
           <Row className="form-group row-align">
               <Col md={6}>
-                <Input type="text" className="form-control" onChange={this.handleChange} id="subject" name="subject" placeholder="Subject"/>
+                <Input style={{textAlign:'center'}}  type="text" className="form-control" onChange={this.handleChange} id="subject" name="subject" placeholder="Subject"/>
               </Col>
           </Row>
           <Row className="form-group row-align">
               <Col md={3}>
-                <Input type="text" className="form-control" onChange={this.handleChange} id="semester" name="semester" placeholder="Semester"/>
+                <Input style={{textAlign:'center'}} type="text" className="form-control" onChange={this.handleChange} id="semester" name="semester" placeholder="Semester"/>
               </Col>
           </Row>
           <Row className="form-group row-align">
               <Col md={6}>
-                <Input type="text" className="form-control" onChange={this.handleChange} id="course" name="course" placeholder="Course"/>
+                <Input style={{textAlign:'center'}} type="text" className="form-control" onChange={this.handleChange} id="course" name="course" placeholder="Course"/>
               </Col>
           </Row>
           <Row className="form-group row-align">
               <Col md={3}>
-                <Input type="text" className="form-control" onChange={this.handleChange} id="regulation" name="regulation" placeholder="Regulation"/>
+                <Input style={{textAlign:'center'}} type="text" className="form-control" onChange={this.handleChange} id="regulation" name="regulation" placeholder="Regulation"/>
               </Col>
           </Row>
           <Row className="form-group">
@@ -56,11 +65,11 @@ class template extends Component {
                 <Input type="text" className="form-control" onChange={this.handleChange} id="time" name="time" placeholder="Time"/>
               </Col>
               <Col md={3} className="offset-md-6">
-              <Input type="number" className="form-control" onChange={this.handleChange} id="mark" name="mark" placeholder="Total Marks"/>
+              <Input type="number" className="form-control" onChange={this.handleChange} id="marks" name="marks" placeholder="Total Marks"/>
               </Col>
           </Row>
           <hr/>
-          <Parta/>
+          <Parta header={this.state.header}/>
           <hr/>
           </Form>
          

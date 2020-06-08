@@ -87,7 +87,7 @@ class Parta extends Component {
               <div>
         <Row className="form-group" key={id}>
               <Col md={1}>
-                  {this.state.qp.length !== 1 && 
+                  {this.state.qp.length !== 1 &&x.subqp.length<1 && 
                   <Button id ="button" className="partabut" color="danger" onClick={() => this.handleRemoveClick(id)}>Del</Button>}
               </Col>
               <Col md={1}>
@@ -135,7 +135,7 @@ class Parta extends Component {
         }
       )}
       <hr/>
-      <Partb id={this.state.qp.length} sa={this.state}/>     
+      <Partb id={this.state.qp.length} sa={this.state} header={this.props.header}/>     
     </div>
   );
 }}
