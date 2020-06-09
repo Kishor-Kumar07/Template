@@ -1,6 +1,8 @@
 import React, { Component } from "react";
-import {Row,Col,Input, Label, Button} from 'reactstrap'
+import {Row,Col,Input, Label, Button, FormFeedback} from 'reactstrap'
 import Math from './math' 
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import './App.css';
 import 'katex/dist/katex.min.css';
 import { PDFViewer,Page, Text, View, Document, StyleSheet  } from "@react-pdf/renderer";
@@ -9,12 +11,18 @@ import Mydoc from './mydoc.js';
 import Scroll from 'react-scroll';
 import { PDFExport } from "@progress/kendo-react-pdf";
 class Partc extends Component {
-  anchor = null;
+  
   constructor(props){
     super(props);
    
     this.state={
       subload:false,
+      total:'',
+      touched:[
+        {
+          total:false
+        }
+      ],
       open:false,
       sub:["a","b","c","d"],
       qp:
@@ -31,14 +39,61 @@ class Partc extends Component {
     ]
     
     }
+    this.handleBlur=this.handleBlur.bind(this)
   }
+
+  submit = (e,id) => {
+    e.preventDefault();
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <div className='custom-ui'>
+            <h1>Are you sure?</h1>
+            <p>You want to delete this Question
+              ?</p>
+            <button onClick={onClose}>Cancel</button>
+            <div>
+            <button
+              onClick={() => {
+                this.handleRemoveClick(id);
+                onClose();
+              }}
+            >
+               Yes, Delete it!
+            </button>
+            </div>
+          </div>
+        );
+      }
+    });
+  };
+ 
+
+  handletotal=e=>{
+    const {value} = e.target;
+    this.setState({total:value})
+  }
+
+  validate(total){
+    const errors={
+      total:'',
+    }
+
+    if(this.state.touched.total&&total=='')
+      errors.total="Total should not be empty";
+
+    return errors;
+  }
+
   exportPDFWithComponent = () => {
     this.pdfExportComponent.save();
 };
+
     openModal=(event) =>{
       event.preventDefault();
       this.setState({ open: true });
     }
+
     closeModal=(event)=> {
       
       this.setState({ open: false });
@@ -87,8 +142,15 @@ class Partc extends Component {
     e.preventDefault();
     this.setState({ open: true });
 }
+
+handleBlur=(field)=>(evt)=>{
+  this.setState({
+    touched:{...this.state.touched,[field]:true}
+  })
+}
+
   render(){
-    {console.log(this.props.header)}
+    const errors=this.validate(this.state.total)
   return (
     <div> 
     <Row className="form-group row-align">
@@ -99,7 +161,11 @@ class Partc extends Component {
                        { <Button id="button" className="partabut" color="primary" onClick={this.handleAddClick}>Add</Button>}
                        </Col>
                         <Col md={3} className="offset-md-1">
-                            <Input type="number" className="form-control" id="part-a_mark" placeholder="Total Mark"/>
+                            <Input type="number" className="form-control"
+                             onBlur={this.handleBlur('total')}
+                           
+                             invalid={errors.total!==''} name="total" onChange={this.handletotal} placeholder="Total Mark"/>
+                             <FormFeedback>{errors.total}</FormFeedback>
                         </Col>
                         
                 </Row>
@@ -108,10 +174,11 @@ class Partc extends Component {
         return (
               <div>
         <Row className="form-group" key={id}>
-              <Col md={1}>
-                  {this.state.qp.length !== 1 && x.subqp.length<1 &&
-                  <Button id ="button" className="partabut" color="danger" onClick={() => this.handleRemoveClick(id)}>Del</Button>}
-              </Col>
+        <Col md={1}>
+          {this.state.qp.length !== 1 && x.subqp.length<1 &&<Button onClick={e=>this.submit(e,id)}>Del</Button>}
+          </Col>
+             
+             
               <Col md={1}>
                 {this.state.qp[id].subqp.length!==0?<Label type="number" className="form-control" id="q_no" name="id">
                   {this.props.idb+1+id+"."+this.state.sub[0]+")"}</Label>
@@ -159,7 +226,7 @@ class Partc extends Component {
       <hr/>  
        <div>
         <button className="button" onClick={this.onClick}>
-          Controlled Popup
+          Preview
         </button>
        
         <Popup
@@ -225,7 +292,7 @@ class Partc extends Component {
                             <Label >PART-A</Label>
                         </Col>
                         <Col md={3} className="offset-md-1">
-                            <Label>Mark</Label>
+                         <Label>{this.props.totala}</Label>
                         </Col>
                         
                 </Row>
@@ -277,7 +344,7 @@ class Partc extends Component {
                             <Label >PART-B</Label>
                         </Col>
                         <Col md={3} className="offset-md-1">
-                            <Label>Mark</Label>
+          <Label>{this.props.totalb}</Label>
                         </Col>
                         
                 </Row>
@@ -329,7 +396,7 @@ class Partc extends Component {
                             <Label >PART-C</Label>
                         </Col>
                         <Col md={3} className="offset-md-1">
-                            <Label>Mark</Label>
+                          <Label>{this.state.total}</Label>
                         </Col>
                         
                 </Row>
