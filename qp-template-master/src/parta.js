@@ -1,6 +1,9 @@
 import React, { Component } from "react";
-import {Row,Col,Input, Label, Button} from 'reactstrap'
+import {Row,Col,Input, Label, Button,FormFeedback} from 'reactstrap'
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import Partb from './partb'
+import Popup from 'reactjs-popup';
 import Math from './math' 
 import 'katex/dist/katex.min.css';
 
@@ -10,6 +13,12 @@ class Parta extends Component {
    
     this.state={
       subload:false,
+      total:'',
+      touched:[
+        {
+          total:false
+        }
+      ],
       sub:["a","b","c","d"],
       qp:
       [
@@ -24,8 +33,58 @@ class Parta extends Component {
     ]
     
     }
+    this.handleBlur=this.handleBlur.bind(this)
   }
 
+
+  handletotal=e=>{
+    const {value} = e.target;
+    this.setState({total:value})
+  }
+
+  validate(total){
+    const errors={
+      total:'',
+    }
+
+    if(this.state.touched.total&&total=='')
+      errors.total="Total should not be empty";
+
+    return errors;
+  }
+
+    submit (e,id) {
+      e.preventDefault();
+      confirmAlert({
+        customUI: ({ onClose }) => {
+          return (
+            <div className='custom-ui'>
+              <h1>Are you sure?</h1>
+              <p>You want to delete this Question
+                ?</p>
+              <button onClick={onClose}>Cancel</button>
+              <div>
+              <button
+                onClick={() => {
+                  this.handleRemoveClick(id);
+                  onClose();
+                }}
+              >
+                Yes, Delete it!
+              </button>
+              </div>
+            </div>
+          );
+        }
+      });
+    };
+
+    handleBlur=(field)=>(evt)=>{
+      this.setState({
+        touched:{...this.state.touched,[field]:true}
+      })
+    }
+  
   // handle input change
    handleInputChange = (e, index) => {
     const { name, value } = e.target;
@@ -66,7 +125,8 @@ class Parta extends Component {
   };
  
   render(){
-    
+    //console.log(this.state.total)
+    const errors=this.validate(this.state.total)
   return (
     <div> 
     <Row className="form-group row-align">
@@ -77,7 +137,11 @@ class Parta extends Component {
                        { <Button id="button" className="partabut" color="primary" onClick={this.handleAddClick}>Add</Button>}
                        </Col>
                         <Col md={3} className="offset-md-1">
-                            <Input type="number" className="form-control" id="part-a_mark" placeholder="Total Mark"/>
+                            <Input type="number" className="form-control"
+                             onBlur={this.handleBlur('total')}
+                           
+                             invalid={errors.total!==''} name="total" onChange={this.handletotal} placeholder="Total Mark"/>
+                             <FormFeedback>{errors.total}</FormFeedback>
                         </Col>
                         
                 </Row>
@@ -86,10 +150,10 @@ class Parta extends Component {
         return (
               <div>
         <Row className="form-group" key={id}>
-              <Col md={1}>
-                  {this.state.qp.length !== 1 &&x.subqp.length<1 && 
-                  <Button id ="button" className="partabut" color="danger" onClick={() => this.handleRemoveClick(id)}>Del</Button>}
-              </Col>
+          <Col md={1}>
+          {this.state.qp.length !== 1 && x.subqp.length<1 &&<Button onClick={e=>this.submit(e,id)}>Del</Button>}
+          </Col>
+             
               <Col md={1}>
                 {this.state.qp[id].subqp.length!==0?<Label type="number" className="form-control" id="q_no" name="id">
                   {id+1+"."+this.state.sub[0]+")"}</Label>
@@ -135,7 +199,7 @@ class Parta extends Component {
         }
       )}
       <hr/>
-      <Partb id={this.state.qp.length} sa={this.state} header={this.props.header}/>     
+      <Partb id={this.state.qp.length} sa={this.state} header={this.props.header} total={this.state.total}/>     
     </div>
   );
 }}

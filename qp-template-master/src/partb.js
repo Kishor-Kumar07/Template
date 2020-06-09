@@ -1,6 +1,8 @@
 import React, { Component } from "react";
-import {Row,Col,Input, Label, Button} from 'reactstrap'
+import {Row,Col,Input, Label, Button, FormFeedback} from 'reactstrap'
 import Partc from './partc'
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import Math from './math' 
 import 'katex/dist/katex.min.css';
 
@@ -10,6 +12,12 @@ class Partb extends Component {
    
     this.state={
       subload:false,
+      total:'',
+      touched:[
+        {
+          total:false
+        }
+      ],
       sub:["a","b","c","d"],
       qp:
       [
@@ -24,6 +32,51 @@ class Partb extends Component {
     ]
     
     }
+    this.handleBlur=this.handleBlur.bind(this)
+  }
+
+  submit = (e,id) => {
+    e.preventDefault();
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <div className='custom-ui'>
+            <h1>Are you sure?</h1>
+            <p>You want to delete this Question
+              ?</p>
+            <button onClick={onClose}>Cancel</button>
+            <div>
+            <button
+              onClick={() => {
+                this.handleRemoveClick(id);
+                onClose();
+              }}
+            >
+               Yes, Delete it!
+            </button>
+            </div>
+          </div>
+        );
+      }
+    });
+    
+  };
+ 
+
+  handletotal=e=>{
+    const {value} = e.target;
+    this.setState({total:value})
+  }
+
+  validate(total){
+    const errors={
+      total:'',
+    }
+
+    if(this.state.touched.total&&total=='')
+      errors.total="Total should not be empty";
+
+    return errors;
   }
 
   // handle input change
@@ -64,9 +117,15 @@ class Partb extends Component {
     this.setState({subload:true})
 
   };
+
+  handleBlur=(field)=>(evt)=>{
+    this.setState({
+      touched:{...this.state.touched,[field]:true}
+    })
+  }
  
   render(){
-    
+    const errors=this.validate(this.state.total)
     return (
       <div> 
       <Row className="form-group row-align">
@@ -77,7 +136,11 @@ class Partb extends Component {
                          { <Button id="button" className="partabut" color="primary" onClick={this.handleAddClick}>Add</Button>}
                          </Col>
                           <Col md={3} className="offset-md-1">
-                              <Input type="number" className="form-control" id="part-a_mark" placeholder="Total Mark"/>
+                              <Input type="number" className="form-control"
+                              onBlur={this.handleBlur('total')}
+                           
+                              invalid={errors.total!==''} name="total" onChange={this.handletotal} placeholder="Total Mark"/>
+                              <FormFeedback>{errors.total}</FormFeedback>
                           </Col>
                           
                   </Row>
@@ -86,10 +149,10 @@ class Partb extends Component {
           return (
                 <div>
           <Row className="form-group" key={id}>
-                <Col md={1}>
-                    {this.state.qp.length !== 1 && x.subqp.length<1 &&
-                    <Button id ="button" className="partabut" color="danger" onClick={() => this.handleRemoveClick(id)}>Del</Button>}
-                </Col>
+          <Col md={1}>
+          {this.state.qp.length !== 1 && x.subqp.length<1 &&<Button onClick={e=>this.submit(e,id)}>Del</Button>}
+          </Col>
+             
                 <Col md={1}>
                   {this.state.qp[id].subqp.length!==0?<Label type="number" className="form-control" id="q_no" name="id">
                     {this.props.id+1+id+"."+this.state.sub[0]+")"}</Label>
@@ -135,7 +198,7 @@ class Partb extends Component {
           }
         )}
         <hr/>
-        <Partc idb={this.props.id+this.state.qp.length} id_a={this.props.id} id_b={this.state.qp.length} sab={this.props.sa} sb={this.state} header={this.props.header}/>
+        <Partc idb={this.props.id+this.state.qp.length} id_a={this.props.id} id_b={this.state.qp.length} sab={this.props.sa} sb={this.state} header={this.props.header} totala={this.props.total} totalb={this.state.total}/>
       </div>
     );
 }}
