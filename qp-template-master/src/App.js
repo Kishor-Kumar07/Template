@@ -47,7 +47,11 @@ class template extends Component {
           </Row>
           <Row className="form-group row-align">
               <Col md={3}>
-                <Input style={{textAlign:'center'}} type="text" className="form-control" onChange={this.handleChange} id="semester" name="semester" placeholder="Semester"/>
+                <Input style={{textAlign:'center'}} type="select" className="form-control" onChange={this.handleChange} id="semester" name="semester" placeholder="Semester">
+                <option>Assessment-I</option>
+                <option>Assessment-II</option>
+                <option>End Semester</option>
+                </Input>
               </Col>
           </Row>
           <Row className="form-group row-align">
@@ -62,10 +66,16 @@ class template extends Component {
           </Row>
           <Row className="form-group">
               <Col md={3}>
-                <Input type="text" className="form-control" onChange={this.handleChange} id="time" name="time" placeholder="Time"/>
+                <Input type="select" style={{textAlign:'center'}} className="form-control" onChange={this.handleChange} id="time" name="time" placeholder="Time">
+                <option>1.5 Hrs</option>
+                <option>3 Hrs</option>
+                </Input>
               </Col>
               <Col md={3} className="offset-md-6">
-              <Input type="number" className="form-control" onChange={this.handleChange} id="marks" name="marks" placeholder="Total Marks"/>
+              <Input type="select" style={{textAlign:'center'}} className="form-control" onChange={this.handleChange} id="marks" name="marks" placeholder="Total Marks">
+                 <option>50</option>
+                 <option>100</option>
+              </Input>
               </Col>
           </Row>
           <hr/>

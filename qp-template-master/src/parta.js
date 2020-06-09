@@ -98,7 +98,7 @@ class Parta extends Component {
               </Col>
               <Col md={8}>
                   <Input name="question" className="form-control" placeholder="Questions"
-                      value={x.question} onChange={e => this.handleInputChange(e, id)}/>
+                      value={x.question} required="true" onChange={e => this.handleInputChange(e, id)}/>
                   <Math ques={x.question}/>
               </Col>
               <Col md={1}>
