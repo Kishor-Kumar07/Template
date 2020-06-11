@@ -35,6 +35,8 @@ class Partc extends Component {
           question:false,
           mark:false,
         },
+        file: '',
+        imagePreviewUrl: '',
         errors:{
           question :"error",
           mark:"error"
@@ -48,8 +50,49 @@ class Partc extends Component {
     
     }
     this.handleBlur=this.handleBlur.bind(this)
+    this._handleImageChange = this._handleImageChange.bind(this);
+    this._handleImageSubChange = this._handleImageSubChange.bind(this);
+    this._handleSubmit = this._handleSubmit.bind(this);
   }
 
+  _handleSubmit(e) {
+    e.preventDefault();
+    // TODO: do something with -> this.state.file
+  }
+
+  _handleImageChange(e,index) {
+    e.preventDefault();
+
+    let reader = new FileReader();
+    let file = e.target.files[0];
+
+    reader.onloadend = () => {
+      const list = [...this.state.qp];
+      list[index].file =file;
+      list[index].imagePreviewUrl=reader.result;  
+      this.setState({
+        qp:list
+      });
+    }
+    if(file)
+    reader.readAsDataURL(file)
+  }
+  _handleImageSubChange(e,id,index) {
+    e.preventDefault();
+
+    let reader = new FileReader();
+    let file = e.target.files[0];
+
+    reader.onloadend = () => {
+      this.state.qp[id].subqp[index].file=file;
+      this.state.qp[id].subqp[index].imagePreviewUrl=reader.result;
+      this.setState(
+        this.state.qp[id].subqp[index]
+      );
+    }
+    if(file)
+    reader.readAsDataURL(file)
+  }
   submit = (e,id) => {
     e.preventDefault();
     confirmAlert({
@@ -125,6 +168,12 @@ class Partc extends Component {
     this.state.qp[id].errors.mark="Mark should not be empty";
     
   }
+  validateSubQp(question,mark,id,subid){
+    if(this.state.qp[id].subqp[subid].touched.question&&question=='')
+    this.state.qp[id].subqp[subid].errors.question="Question should not be empty";
+    if(this.state.qp[id].subqp[subid].touched.mark&&mark=='')
+    this.state.qp[id].subqp[subid].errors.mark="Mark should not be empty";
+  }
   exportPDFWithComponent = () => {
     this.pdfExportComponent.save();
 };
@@ -161,6 +210,14 @@ class Partc extends Component {
   handleInputsubChange = (e, index,subid) => {
     const { name, value } = e.target;
     this.state.qp[index].subqp[subid][name] = value;
+    if(name=="question"&&this.state.qp[index].subqp[subid].question!=''){
+      this.state.qp[index].subqp[subid].errors.question='error'
+      this.setState(this.state.qp[index].subqp[subid])
+    }
+    if(name=="mark"&&this.state.qp[index].subqp[subid].mark!=""){
+      this.state.qp[index].subqp[subid].errors.mark='error'
+      this.setState(this.state.qp[index].subqp[subid])
+    }
     this.setState(this.state.qp[index].subqp[subid])
   };
  
@@ -183,6 +240,8 @@ class Partc extends Component {
         question:false,
         mark:false,
       },
+      file: '',
+        imagePreviewUrl: '',
       errors:{
         question :"error",
         mark:"error"
@@ -191,7 +250,15 @@ class Partc extends Component {
   };
 
   handleSubClick = index => {
-    this.state.qp[index].subqp.push({question:"",mark:""})
+    this.state.qp[index].subqp.push({question:"",mark:"",file: '',
+    imagePreviewUrl: '',touched:{
+      question:false,
+      mark:false,
+    },
+    errors:{
+      question :"error",
+      mark:"error"
+    }})
     this.setState({subload:true})
   };
 
@@ -205,7 +272,11 @@ handleBlur=(field,id)=>(evt)=>{
   list[id].touched[field] = true; 
   this.setState({qp:list})
 }
-
+handleBlurSubQp=(field,index,subid)=>(evt)=>{
+  console.log(this.state.qp[index].subqp[subid].touched[field])
+  this.state.qp[index].subqp[subid].touched[field]=true;
+  this.setState(this.state.qp[index].subqp[subid])
+  }
   render(){
     const errors=this.validate(this.state.total)
   return (
@@ -249,6 +320,8 @@ handleBlur=(field,id)=>(evt)=>{
                       invalid={x.errors.question!=='error'} value={x.question} onChange={e => this.handleInputChange(e, id)}/>
                   <Math ques={x.question}/>
                   <FormFeedback>{x.errors.question}</FormFeedback>
+                  <Input type="file" onChange={e=>this._handleImageChange(e,id)} />
+                  <img style={{paddingLeft:'20px'}}height="300px" src={x.imagePreviewUrl} />
               </Col>
               <Col md={1}>
                 <Input type="number" className="form-control ml10" name="mark" placeholder="M"
@@ -260,7 +333,9 @@ handleBlur=(field,id)=>(evt)=>{
                   {<Button id ="button" className="partabut" onClick={()=>this.handleSubClick(id)}>Sub</Button>}
               </Col>
             </Row>   
-            <div>{this.state.qp[id].subqp.map((xb,subid)=><div><Row className="form-group" key={id}>
+            <div>{this.state.qp[id].subqp.map((xb,subid)=><div>
+              {this.validateSubQp(xb.question,xb.mark,id,subid)}
+              <Row className="form-group" key={id}>
               <Col md={1}>
               {<Button onClick={e=>this.submitsub(e,id,subid)}>Del</Button>}
               </Col>
@@ -269,12 +344,18 @@ handleBlur=(field,id)=>(evt)=>{
               </Col>
               <Col md={8}>
                   <Input name="question" className="form-control" placeholder="Questions"
-                      value={xb.question} onChange={e => this.handleInputsubChange(e, id, subid)}/>
+                      onBlur={this.handleBlurSubQp("question",id,subid)}
+                      invalid={xb.errors.question!=='error'} value={xb.question} onChange={e => this.handleInputsubChange(e, id, subid)}/>
+                     <FormFeedback>{xb.errors.question}</FormFeedback>
                       <Math ques={xb.question}/>
+                      <Input type="file" onChange={e=>this._handleImageSubChange(e,id,subid)} />
+                  <img style={{paddingLeft:'20px'}}height="300px" src={xb.imagePreviewUrl} />
               </Col>
               <Col md={1}>
                   <Input type="number" className="form-control ml10" name="mark" placeholder="M"
-                      value={xb.mark} onChange={e => this.handleInputsubChange(e, id)}/>
+                       onBlur={this.handleBlurSubQp("mark",id,subid)}
+                       invalid={xb.errors.mark!=='error'} value={xb.mark} onChange={e => this.handleInputsubChange(e, id,subid)}/>
+              <FormFeedback>{xb.errors.mark}</FormFeedback>
               </Col>
               <Col md={1}>
                   {<Button id ="button" className="partabut" onClick={()=>this.handleSubClick(id)}>Sub</Button>}
@@ -371,6 +452,7 @@ handleBlur=(field,id)=>(evt)=>{
                   <Col md={10}>
                   
                      <Math ques={x.question}/>
+                     <img style={{paddingLeft:'20px'}}height="300px" src={x.imagePreviewUrl} />
               </Col>
               <Col md={1}>
                   <Label>{x.mark}</Label>
@@ -386,6 +468,7 @@ handleBlur=(field,id)=>(evt)=>{
                     <Col md={8}>
                     
                         <Label><Math ques={xb.question}/></Label>
+                        <img style={{paddingLeft:'20px'}}height="300px" src={xb.imagePreviewUrl} />
                 </Col>
                 <Col md={1}>
                     <Label>{xb.mark}</Label>
@@ -423,6 +506,7 @@ handleBlur=(field,id)=>(evt)=>{
                   <Col md={8}>
                   
                       <Label><Math ques={x.question}/></Label>
+                      <img style={{paddingLeft:'20px'}}height="300px" src={x.imagePreviewUrl} />
               </Col>
               <Col md={1}>
                   <Label>{x.mark}</Label>
@@ -438,6 +522,7 @@ handleBlur=(field,id)=>(evt)=>{
                     <Col md={8}>
                     
                         <Label><Math ques={xb.question}/></Label>
+                        <img style={{paddingLeft:'20px'}}height="300px" src={xb.imagePreviewUrl} />
                 </Col>
                 <Col md={1}>
                     <Label>{xb.mark}</Label>
@@ -475,6 +560,7 @@ handleBlur=(field,id)=>(evt)=>{
                   <Col md={8}>
                   
                       <Label><Math ques={x.question}/></Label>
+                      <img style={{paddingLeft:'20px'}}height="300px" src={x.imagePreviewUrl} />
               </Col>
               <Col md={1}>
                   <Label>{x.mark}</Label>
@@ -490,6 +576,7 @@ handleBlur=(field,id)=>(evt)=>{
                     <Col md={8}>
                     
                         <Label><Math ques={xb.question}/></Label>
+                        <img style={{paddingLeft:'20px'}}height="300px" src={xb.imagePreviewUrl} />
                 </Col>
                 <Col md={1}>
                     <Label>{xb.mark}</Label>

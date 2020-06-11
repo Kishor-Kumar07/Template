@@ -117,7 +117,7 @@ class template extends Component {
               <Input style={{textAlign:'center'}} type="select" className="form-control"
               onBlur={this.handleBlur('semester')}
               invalid={errors.semester!==''} onChange={this.handleChange} id="semester" name="semester" placeholder="Semester">
-                <option value="">--Select Exam--</option>
+                <option value=""style={{textAlign:'center'}}>--Select Exam--</option>
                 <option value="Assessment-I">Assessment-I</option>
                 <option value="Assessment-II">Assessment-II</option>
                 <option value="Semester">Semester</option>
