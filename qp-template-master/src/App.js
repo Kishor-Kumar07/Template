@@ -97,8 +97,9 @@ class template extends Component {
                 
                 invalid={errors.date!==''}
                  id="date" name="date" placeholder="Date"/>
+                 <FormFeedback>{errors.date}</FormFeedback>
               </Col>
-              <FormFeedback>{errors.date}</FormFeedback>
+              
           </Row>
           <Row className="form-group row-align">
               <Col md={6}>
@@ -146,8 +147,8 @@ class template extends Component {
               onBlur={this.handleBlur('time')} 
               invalid={errors.time!==''} onChange={this.handleChange} id="time" name="time" placeholder="Time">
               <option value="">--Select Time--</option>
-              <option value="50">1.5 hrs</option>
-              <option value="100">3 hrs</option>
+              <option value="1.5 hrs">1.5 hrs</option>
+              <option value="3 hrs">3 hrs</option>
                 </Input>
                 <FormFeedback>{errors.time}</FormFeedback>
               </Col>

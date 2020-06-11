@@ -16,7 +16,9 @@ class Parta extends Component {
       total:'',
       touched:[
         {
-          total:false
+          total:false,
+          question:false,
+          mark:false
         }
       ],
       sub:["a","b","c","d"],
@@ -49,6 +51,18 @@ class Parta extends Component {
 
     if(this.state.touched.total&&total=='')
       errors.total="Total should not be empty";
+
+    return errors;
+  }
+
+  validateQp(question,mark){
+    const errors={
+      question:'',
+      mark:''
+    }
+
+    if(this.state.touched.question&&question=='')
+      errors.question="Question should not be empty";
 
     return errors;
   }
@@ -149,6 +163,7 @@ class Parta extends Component {
       this.state.qp.map((x,id) => {
         return (
               <div>
+                {this.validateQp(x.question,x.mark)}
         <Row className="form-group" key={id}>
           <Col md={1}>
           {this.state.qp.length !== 1 && x.subqp.length<1 &&<Button onClick={e=>this.submit(e,id)}>Del</Button>}
@@ -162,8 +177,10 @@ class Parta extends Component {
               </Col>
               <Col md={8}>
                   <Input name="question" className="form-control" placeholder="Questions"
-                      value={x.question} required="true" onChange={e => this.handleInputChange(e, id)}/>
+                     onBlur={this.handleBlur('question')}
+                     invalid={errors.question!==''} value={x.question} onChange={e => this.handleInputChange(e, id)}/>
                   <Math ques={x.question}/>
+                  <FormFeedback>{errors.question}</FormFeedback>
               </Col>
               <Col md={1}>
                 <Input type="number" className="form-control ml10" name="mark" placeholder="M"

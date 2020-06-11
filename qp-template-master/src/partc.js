@@ -67,6 +67,32 @@ class Partc extends Component {
       }
     });
   };
+
+  submitsub (e,id,subid) {
+    e.preventDefault();
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <div className='custom-ui'>
+            <h1>Are you sure?</h1>
+            <p>You want to delete this Question
+              ?</p>
+            <button onClick={onClose}>Cancel</button>
+            <div>
+            <button
+              onClick={() => {
+                this.handleRemovesubClick(id,subid);
+                onClose();
+              }}
+            >
+              Yes, Delete it!
+            </button>
+            </div>
+          </div>
+        );
+      }
+    });
+  };
  
 
   handletotal=e=>{
@@ -200,8 +226,7 @@ handleBlur=(field)=>(evt)=>{
             </Row>   
             <div>{this.state.qp[id].subqp.map((xb,subid)=><div><Row className="form-group" key={id}>
               <Col md={1}>
-                  {
-                  <Button id="button" className="partabut" color="danger" onClick={() => this.handleRemovesubClick(id,subid)}>Del</Button>}
+              {<Button onClick={e=>this.submitsub(e,id,subid)}>Del</Button>}
               </Col>
               <Col md={1}>
                   <Label type="number" className="form-control" id="q_no" name="id">{this.props.idb+1+id+"."+this.state.sub[subid+1]+")"}</Label>
@@ -289,7 +314,7 @@ handleBlur=(field)=>(evt)=>{
 
             <Row className="form-group row-align">
                         <Col md={3} className="offset-md-4">
-                            <Label >PART-A</Label>
+                            <Label ><b>PART-A</b></Label>
                         </Col>
                         <Col md={3} className="offset-md-1">
                          <Label>{this.props.totala}</Label>
@@ -341,7 +366,7 @@ handleBlur=(field)=>(evt)=>{
             <div>
             <Row className="form-group row-align">
                         <Col md={3} className="offset-md-4">
-                            <Label >PART-B</Label>
+                            <Label ><b>PART-B</b></Label>
                         </Col>
                         <Col md={3} className="offset-md-1">
           <Label>{this.props.totalb}</Label>
@@ -393,7 +418,7 @@ handleBlur=(field)=>(evt)=>{
             <div>
             <Row className="form-group row-align">
                         <Col md={3} className="offset-md-4">
-                            <Label >PART-C</Label>
+                            <Label ><b>PART-C</b></Label>
                         </Col>
                         <Col md={3} className="offset-md-1">
                           <Label>{this.state.total}</Label>

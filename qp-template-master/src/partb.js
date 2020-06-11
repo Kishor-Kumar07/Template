@@ -61,6 +61,32 @@ class Partb extends Component {
     });
     
   };
+
+  submitsub (e,id,subid) {
+    e.preventDefault();
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <div className='custom-ui'>
+            <h1>Are you sure?</h1>
+            <p>You want to delete this Question
+              ?</p>
+            <button onClick={onClose}>Cancel</button>
+            <div>
+            <button
+              onClick={() => {
+                this.handleRemovesubClick(id,subid);
+                onClose();
+              }}
+            >
+              Yes, Delete it!
+            </button>
+            </div>
+          </div>
+        );
+      }
+    });
+  };
  
 
   handletotal=e=>{
@@ -174,8 +200,7 @@ class Partb extends Component {
               </Row>   
               <div>{this.state.qp[id].subqp.map((xb,subid)=><div><Row className="form-group" key={id}>
                 <Col md={1}>
-                    {
-                    <Button id="button" className="partabut" color="danger" onClick={() => this.handleRemovesubClick(id,subid)}>Del</Button>}
+                {<Button onClick={e=>this.submitsub(e,id,subid)}>Del</Button>}
                 </Col>
                 <Col md={1}>
                     <Label type="number" className="form-control" id="q_no" name="id">{this.props.id+1+id+"."+this.state.sub[subid+1]+")"}</Label>
