@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Form,Container,Row,Col,Input,Button, FormFeedback} from 'reactstrap'
 import { PDFExport} from "@progress/kendo-react-pdf";
 import Parta from './parta'
-import { DropDownList } from '@progress/kendo-react-dropdowns';
+
 import './App.css';
 import { Document, Page, Text, View, StyleSheet,PDFViewer } from '@react-pdf/renderer';
 class template extends Component {
@@ -176,5 +176,58 @@ class template extends Component {
 }
  export default template;
 
+// class ImageUpload extends Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//       file: '',
+//       imagePreviewUrl: ''
+//     };
+//     this._handleImageChange = this._handleImageChange.bind(this);
+//     this._handleSubmit = this._handleSubmit.bind(this);
+//   }
 
+//   _handleSubmit(e) {
+//     e.preventDefault();
+//     // TODO: do something with -> this.state.file
+//   }
+
+//   _handleImageChange(e) {
+//     e.preventDefault();
+
+//     let reader = new FileReader();
+//     let file = e.target.files[0];
+
+//     reader.onloadend = () => {
+//       this.setState({
+//         file: file,
+//         imagePreviewUrl: reader.result
+//       });
+//     }
+
+//     reader.readAsDataURL(file)
+//   }
+
+//   render() {
+//     let {imagePreviewUrl} = this.state;
+//     let $imagePreview = null;
+//     if (imagePreviewUrl) {
+//       $imagePreview = (<img style={{paddingLeft:'20px'}}height="300px" src={imagePreviewUrl} />);
+//     }
+
+//     return (
+//       <div>
+//         <form onSubmit={this._handleSubmit}>
+//           <input type="file" onChange={this._handleImageChange} />
+//           {/* <button type="submit" onClick={this._handleSubmit}>Upload Image</button> */}
+//         </form>
+//         {$imagePreview}
+//         <br/>
+//         <input type="file" onChange={this._handleImageChange} />
+//       </div>
+//     )
+//   }
+
+// }
+// export default ImageUpload;
 

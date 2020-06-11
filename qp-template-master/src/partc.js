@@ -309,7 +309,7 @@ handleBlur=(field)=>(evt)=>{
               </Col>
                   <Col md={10}>
                   
-                      <Label><Math ques={x.question}/></Label>
+                     <Math ques={x.question}/>
               </Col>
               <Col md={1}>
                   <Label>{x.mark}</Label>
