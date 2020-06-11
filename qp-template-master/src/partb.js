@@ -24,6 +24,14 @@ class Partb extends Component {
         {
         question:"",
         mark:"",
+        touched:{
+          question:false,
+          mark:false,
+        },
+        errors:{
+          question :"error",
+          mark:"error"
+        },
       subqp:
           [
            
@@ -104,12 +112,28 @@ class Partb extends Component {
 
     return errors;
   }
-
+  validateQp(question,mark,id){
+    if(this.state.qp[id].touched.question&&question=='')
+    this.state.qp[id].errors.question="Question should not be empty";
+    if(this.state.qp[id].touched.mark&&mark=='')
+    this.state.qp[id].errors.mark="Mark should not be empty";
+    
+  }
   // handle input change
    handleInputChange = (e, index) => {
     const { name, value } = e.target;
     const list = [...this.state.qp];
     list[index][name] = value; 
+    if(name=="question"&&list[index][name]!='')
+    {
+      list[index].errors.question='error';
+      this.setState({qp:list})
+    }
+    if(name=="mark"&&list[index][name]!='')
+    {
+      list[index].errors.mark='error';
+      this.setState({qp:list})
+    }
     this.setState({qp:list})
   };
 
@@ -134,7 +158,14 @@ class Partb extends Component {
   // handle click event of the Add button
    handleAddClick = (e) => {
     this.setState((prevState)=>({
-      qp:[...prevState.qp,{question:"",mark:"",subqp:[]}]
+      qp:[...prevState.qp,{question:"",mark:"",subqp:[],touched:{
+        question:false,
+        mark:false,
+      },
+      errors:{
+        question :"error",
+        mark:"error"
+      }}]
     }))
   };
 
@@ -144,10 +175,10 @@ class Partb extends Component {
 
   };
 
-  handleBlur=(field)=>(evt)=>{
-    this.setState({
-      touched:{...this.state.touched,[field]:true}
-    })
+  handleBlur=(field,id)=>(evt)=>{
+    const list = [...this.state.qp];
+    list[id].touched[field] = true; 
+    this.setState({qp:list})
   }
  
   render(){
@@ -174,6 +205,7 @@ class Partb extends Component {
         this.state.qp.map((x,id) => {
           return (
                 <div>
+                  {this.validateQp(x.question,x.mark,id)}
           <Row className="form-group" key={id}>
           <Col md={1}>
           {this.state.qp.length !== 1 && x.subqp.length<1 &&<Button onClick={e=>this.submit(e,id)}>Del</Button>}
@@ -187,12 +219,16 @@ class Partb extends Component {
                 </Col>
                 <Col md={8}>
                     <Input name="question" className="form-control" placeholder="Questions"
-                        value={x.question} onChange={e => this.handleInputChange(e, id)}/>
+                        onBlur={this.handleBlur('question',id)}
+                        invalid={x.errors.question!=='error'} value={x.question} onChange={e => this.handleInputChange(e, id)}/>
                     <Math ques={x.question}/>
+                    <FormFeedback>{x.errors.question}</FormFeedback>
                 </Col>
                 <Col md={1}>
                   <Input type="number" className="form-control ml10" name="mark" placeholder="M"
-                        value={x.mark} onChange={e => this.handleInputChange(e, id)}/>
+                        onBlur={this.handleBlur('mark',id)}
+                        invalid={x.errors.mark!=='error'} value={x.mark} onChange={e => this.handleInputChange(e, id)}/>
+                <FormFeedback>{x.errors.mark}</FormFeedback>
                 </Col>
                 <Col md={1}>
                     {<Button id ="button" className="partabut" onClick={()=>this.handleSubClick(id)}>Sub</Button>}
