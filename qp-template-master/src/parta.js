@@ -7,6 +7,9 @@ import Popup from 'reactjs-popup';
 import Math from './math' 
 import 'katex/dist/katex.min.css';
 
+
+
+
 class Parta extends Component {
   constructor(){
     super();
@@ -54,6 +57,7 @@ class Parta extends Component {
       touched:{...this.state.touched,[field]:true}
     })
   }
+
   
   _handleSubmit(e) {
         e.preventDefault();
@@ -109,6 +113,8 @@ class Parta extends Component {
 
     return errors;
   }
+
+
 
   submitsub (e,id,subid) {
     e.preventDefault();
@@ -201,7 +207,13 @@ class Parta extends Component {
       this.setState({qp:list})
     }
     this.setState({qp:list})
-    console.log(this.state.qp[index])
+    // if(name=="mark"){
+    //   var m=this.state.qp[index].mark
+    //   console.log(m)
+    //   var total=qpMark+parseInt(m)
+    //   console.log(total)
+    // }
+   // console.log(this.state.qp[index])
   };
 
   handleInputsubChange = (e, index,subid) => {
@@ -259,11 +271,12 @@ class Parta extends Component {
     this.setState({subload:true})
 
   };
+
  
   render(){
     //console.log(this.state.total)
     const errors=this.validate(this.state.total)
-    
+   
   return (
     <div> 
     <Row className="form-group row-align">
@@ -354,6 +367,7 @@ class Parta extends Component {
       <Partb id={this.state.qp.length} sa={this.state} header={this.props.header} total={this.state.total}/>     
     </div>
   );
+ 
 }}
  
 export default Parta;

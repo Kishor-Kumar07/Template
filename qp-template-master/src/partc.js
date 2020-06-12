@@ -10,6 +10,11 @@ import Popup from 'reactjs-popup';
 import Mydoc from './mydoc.js';
 import Scroll from 'react-scroll';
 import { PDFExport } from "@progress/kendo-react-pdf";
+
+var qpaMark=0
+var qpbMark=0
+var qpcMark=0
+
 class Partc extends Component {
   
   constructor(props){
@@ -17,6 +22,9 @@ class Partc extends Component {
    
     this.state={
       subload:false,
+      noMatchA:false,
+      noMatchB:false,
+      noMatchC:false,
       total:'',
       touched:[
         {
@@ -225,6 +233,7 @@ class Partc extends Component {
       this.setState(this.state.qp[index].subqp[subid])
     }
     this.setState(this.state.qp[index].subqp[subid])
+   
   };
  
   // handle click event of the Remove button
@@ -270,6 +279,33 @@ class Partc extends Component {
 
   onClick = (e) => {
     e.preventDefault();
+    var qpa=''+qpaMark
+    var tota=''+(this.props.sab.total)
+    var qpb=''+qpbMark
+    var totb=''+(this.props.sb.total)
+    var qpc=''+qpcMark
+    var totc=''+(this.state.total)
+    if(qpa!=tota){ 
+     this.state.noMatchA=true
+    }
+    if(qpa==tota){
+      this.state.noMatchA=false
+    }
+    if(qpb!=totb){ 
+      this.state.noMatchB=true
+     }
+     if(qpb==totb){
+       this.state.noMatchB=false
+     }
+     if(qpc!=totc){ 
+      this.state.noMatchC=true
+     }
+     if(qpc==totc){
+       this.state.noMatchC=false
+     }
+    console.log(this.state.noMatchA)
+    console.log(this.state.noMatchB)
+    console.log(this.state.noMatchC)
     this.setState({ open: true });
 }
 
@@ -278,11 +314,50 @@ handleBlur=(field,id)=>(evt)=>{
   list[id].touched[field] = true; 
   this.setState({qp:list})
 }
+
 handleBlurSubQp=(field,index,subid)=>(evt)=>{
   console.log(this.state.qp[index].subqp[subid].touched[field])
   this.state.qp[index].subqp[subid].touched[field]=true;
   this.setState(this.state.qp[index].subqp[subid])
   }
+
+  handlecheck(){
+    var qpamark=0;
+    var qpasubmark=0;
+    var qpbmark=0;
+    var qpbsubmark=0;
+    var qpcmark=0;
+    var qpcsubmark=0;
+    this.props.sab.qp.map((x,id)=>{
+     qpamark=qpamark+parseInt(x.mark)
+     this.props.sab.qp[id].subqp.map((xb,id)=>{
+      qpasubmark=qpasubmark+parseInt(xb.mark)
+     })
+    })
+    qpaMark=qpamark+qpasubmark
+   // console.log(qpaMark)
+    
+    this.props.sb.qp.map((x,id)=>{
+     qpbmark=qpbmark+parseInt(x.mark)
+     this.props.sb.qp[id].subqp.map((xb,id)=>{
+      qpbsubmark=qpbsubmark+parseInt(xb.mark)
+     })
+    })
+    qpbMark=qpbmark+qpbsubmark
+    //console.log(qpbMark)
+   
+    this.state.qp.map((x,id)=>{
+     qpcmark=qpcmark+parseInt(x.mark)
+     this.state.qp[id].subqp.map((xb,id)=>{
+      qpcsubmark=qpcsubmark+parseInt(xb.mark)
+     })
+    })
+    qpcMark=qpcmark+qpcsubmark
+   // console.log(qpcMark)
+  }
+
+  
+ 
   render(){
     const errors=this.validate(this.state.total)
   return (
@@ -372,7 +447,9 @@ handleBlurSubQp=(field,index,subid)=>(evt)=>{
         }
       )}
       <hr/>  
+      {this.handlecheck()}
        <div>
+         
         <button className="button" onClick={this.onClick}>
           Preview
         </button>
