@@ -55,6 +55,12 @@ class Partc extends Component {
     this._handleSubmit = this._handleSubmit.bind(this);
   }
 
+  handleBlurTotal=(field)=>(evt)=>{
+    this.setState({
+      touched:{...this.state.touched,[field]:true}
+    })
+  }
+
   _handleSubmit(e) {
     e.preventDefault();
     // TODO: do something with -> this.state.file
@@ -290,7 +296,7 @@ handleBlurSubQp=(field,index,subid)=>(evt)=>{
                        </Col>
                         <Col md={3} className="offset-md-1">
                             <Input type="number" className="form-control"
-                             onBlur={this.handleBlur('total')}
+                             onBlur={this.handleBlurTotal('total')}
                            
                              invalid={errors.total!==''} name="total" onChange={this.handletotal} placeholder="Total Mark"/>
                              <FormFeedback>{errors.total}</FormFeedback>
