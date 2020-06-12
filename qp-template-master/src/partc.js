@@ -10,6 +10,11 @@ import Popup from 'reactjs-popup';
 import Mydoc from './mydoc.js';
 import Scroll from 'react-scroll';
 import { PDFExport } from "@progress/kendo-react-pdf";
+
+var qpaMark=0
+var qpbMark=0
+var qpcMark=0
+
 class Partc extends Component {
   
   constructor(props){
@@ -17,6 +22,10 @@ class Partc extends Component {
    
     this.state={
       subload:false,
+      noMatch:false,
+      noMatchA:false,
+      noMatchB:false,
+      noMatchC:false,
       total:'',
       touched:[
         {
@@ -53,6 +62,12 @@ class Partc extends Component {
     this._handleImageChange = this._handleImageChange.bind(this);
     this._handleImageSubChange = this._handleImageSubChange.bind(this);
     this._handleSubmit = this._handleSubmit.bind(this);
+  }
+
+  handleBlurTotal=(field)=>(evt)=>{
+    this.setState({
+      touched:{...this.state.touched,[field]:true}
+    })
   }
 
   _handleSubmit(e) {
@@ -219,6 +234,7 @@ class Partc extends Component {
       this.setState(this.state.qp[index].subqp[subid])
     }
     this.setState(this.state.qp[index].subqp[subid])
+   
   };
  
   // handle click event of the Remove button
@@ -264,7 +280,63 @@ class Partc extends Component {
 
   onClick = (e) => {
     e.preventDefault();
-    this.setState({ open: true });
+    var qpa=''+qpaMark
+    var tota=''+(this.props.sab.total)
+    var qpb=''+qpbMark
+    var totb=''+(this.props.sb.total)
+    var qpc=''+qpcMark
+    var totc=''+(this.state.total)
+    var tot=''+this.props.header.marks
+   // console.log(tot)
+   var total=parseInt(this.props.sab.total)+parseInt(this.props.sb.total)+parseInt(this.state.total)
+   //console.log(total)
+   var total_abc=''+total
+  // console.log(typeof(total_abc))
+    if(qpa!=tota){ 
+     this.state.noMatchA=true
+    }
+    if(qpa==tota){
+      this.state.noMatchA=false
+    }
+    if(qpb!=totb){ 
+      this.state.noMatchB=true
+     }
+     if(qpb==totb){
+       this.state.noMatchB=false
+     }
+     if(qpc!=totc){ 
+      this.state.noMatchC=true
+     }
+     if(qpc==totc){
+       this.state.noMatchC=false
+     }
+     if(tot!=total_abc){ 
+      this.state.noMatch=true
+      console.log(this.state.noMatch)
+     }
+     if(tot==total_abc){
+       this.state.noMatch=false
+       console.log(this.state.noMatch)
+     }
+     if(this.state.noMatch){
+      alert("Total is not equal")
+     }
+     else if(this.state.noMatchA){
+      alert("Total is not equal in Part-A")
+     }
+     else if(this.state.noMatchB){
+      alert("Total is not equal in Part-B")
+     }
+     else if(this.state.noMatchC){
+      alert("Total is not equal in Part-C")
+     }
+     if(this.state.noMatchA||this.state.noMatchB||this.state.noMatchC||this.state.noMatch){
+       this.setState({open:false})
+     }
+     else{
+       this.setState({open:true})
+     }
+    //this.setState({open:true})
 }
 
 handleBlur=(field,id)=>(evt)=>{
@@ -272,11 +344,50 @@ handleBlur=(field,id)=>(evt)=>{
   list[id].touched[field] = true; 
   this.setState({qp:list})
 }
+
 handleBlurSubQp=(field,index,subid)=>(evt)=>{
   console.log(this.state.qp[index].subqp[subid].touched[field])
   this.state.qp[index].subqp[subid].touched[field]=true;
   this.setState(this.state.qp[index].subqp[subid])
   }
+
+  handlecheck(){
+    var qpamark=0;
+    var qpasubmark=0;
+    var qpbmark=0;
+    var qpbsubmark=0;
+    var qpcmark=0;
+    var qpcsubmark=0;
+    this.props.sab.qp.map((x,id)=>{
+     qpamark=qpamark+parseInt(x.mark)
+     this.props.sab.qp[id].subqp.map((xb,id)=>{
+      qpasubmark=qpasubmark+parseInt(xb.mark)
+     })
+    })
+    qpaMark=qpamark+qpasubmark
+   // console.log(qpaMark)
+    
+    this.props.sb.qp.map((x,id)=>{
+     qpbmark=qpbmark+parseInt(x.mark)
+     this.props.sb.qp[id].subqp.map((xb,id)=>{
+      qpbsubmark=qpbsubmark+parseInt(xb.mark)
+     })
+    })
+    qpbMark=qpbmark+qpbsubmark
+    //console.log(qpbMark)
+   
+    this.state.qp.map((x,id)=>{
+     qpcmark=qpcmark+parseInt(x.mark)
+     this.state.qp[id].subqp.map((xb,id)=>{
+      qpcsubmark=qpcsubmark+parseInt(xb.mark)
+     })
+    })
+    qpcMark=qpcmark+qpcsubmark
+   // console.log(qpcMark)
+  }
+
+  
+ 
   render(){
     const errors=this.validate(this.state.total)
   return (
@@ -290,7 +401,7 @@ handleBlurSubQp=(field,index,subid)=>(evt)=>{
                        </Col>
                         <Col md={3} className="offset-md-1">
                             <Input type="number" className="form-control"
-                             onBlur={this.handleBlur('total')}
+                             onBlur={this.handleBlurTotal('total')}
                            
                              invalid={errors.total!==''} name="total" onChange={this.handletotal} placeholder="Total Mark"/>
                              <FormFeedback>{errors.total}</FormFeedback>
@@ -366,7 +477,9 @@ handleBlurSubQp=(field,index,subid)=>(evt)=>{
         }
       )}
       <hr/>  
+      {this.handlecheck()}
        <div>
+         
         <button className="button" onClick={this.onClick}>
           Preview
         </button>

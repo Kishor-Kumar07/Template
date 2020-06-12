@@ -7,6 +7,9 @@ import Popup from 'reactjs-popup';
 import Math from './math' 
 import 'katex/dist/katex.min.css';
 
+
+
+
 class Parta extends Component {
   constructor(){
     super();
@@ -48,6 +51,13 @@ class Parta extends Component {
     this._handleImageSubChange = this._handleImageSubChange.bind(this);
     this._handleSubmit = this._handleSubmit.bind(this);
   }
+
+  handleBlurTotal=(field)=>(evt)=>{
+    this.setState({
+      touched:{...this.state.touched,[field]:true}
+    })
+  }
+
   
   _handleSubmit(e) {
         e.preventDefault();
@@ -103,6 +113,34 @@ class Parta extends Component {
 
     return errors;
   }
+
+
+
+  submitsub (e,id,subid) {
+    e.preventDefault();
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <div className='custom-ui'>
+            <h1>Are you sure?</h1>
+            <p>You want to delete this Question
+              ?</p>
+            <button onClick={onClose}>Cancel</button>
+            <div>
+            <button
+              onClick={() => {
+                this.handleRemovesubClick(id,subid);
+                onClose();
+              }}
+            >
+              Yes, Delete it!
+            </button>
+            </div>
+          </div>
+        );
+      }
+    });
+  };
 
   validateQp(question,mark,id){
     if(this.state.qp[id].touched.question&&question=='')
@@ -169,7 +207,13 @@ class Parta extends Component {
       this.setState({qp:list})
     }
     this.setState({qp:list})
-    console.log(this.state.qp[index])
+    // if(name=="mark"){
+    //   var m=this.state.qp[index].mark
+    //   console.log(m)
+    //   var total=qpMark+parseInt(m)
+    //   console.log(total)
+    // }
+   // console.log(this.state.qp[index])
   };
 
   handleInputsubChange = (e, index,subid) => {
@@ -227,11 +271,12 @@ class Parta extends Component {
     this.setState({subload:true})
 
   };
+
  
   render(){
     //console.log(this.state.total)
     const errors=this.validate(this.state.total)
-    
+   
   return (
     <div> 
     <Row className="form-group row-align">
@@ -243,7 +288,7 @@ class Parta extends Component {
                        </Col>
                         <Col md={3} className="offset-md-1">
                             <Input type="number" className="form-control"
-                             onBlur={this.handleBlur('total')}
+                             onBlur={this.handleBlurTotal('total')}
                            
                              invalid={errors.total!==''} name="total" onChange={this.handletotal} placeholder="Total Mark"/>
                              <FormFeedback>{errors.total}</FormFeedback>
@@ -290,8 +335,7 @@ class Parta extends Component {
               <Row className="form-group" key={id}>
 
               <Col md={1}>
-                  {
-                  <Button id="button" className="partabut" color="danger" onClick={() => this.handleRemovesubClick(id,subid)}>Del</Button>}
+              {<Button onClick={e=>this.submitsub(e,id,subid)}>Del</Button>}
               </Col>
               <Col md={1}>
                   <Label type="number" className="form-control" id="q_no" name="id">{id+1+"."+this.state.sub[subid+1]+")"}</Label>
@@ -323,6 +367,7 @@ class Parta extends Component {
       <Partb id={this.state.qp.length} sa={this.state} header={this.props.header} total={this.state.total}/>     
     </div>
   );
+ 
 }}
  
 export default Parta;
