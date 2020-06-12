@@ -318,25 +318,25 @@ class Partc extends Component {
        this.state.noMatch=false
        console.log(this.state.noMatch)
      }
-    //  if(this.state.noMatchA){
-    //   alert("Total is not equal in Part-A")
-    //  }
-    //  else if(this.state.noMatchB){
-    //   alert("Total is not equal in Part-B")
-    //  }
-    //  else if(this.state.noMatchC){
-    //   alert("Total is not equal in Part-C")
-    //  }
-    //  if(this.props.sab.touched==false){
-    //    alert("Some field is not ")
-    //  }
-    //  if(this.state.noMatchA||this.state.noMatchB||this.state.noMatchC){
-    //    this.setState({open:false})
-    //  }
-    //  else{
-    //    this.setState({open:true})
-    //  }
-    this.setState({open:true})
+     if(this.state.noMatch){
+      alert("Total is not equal")
+     }
+     else if(this.state.noMatchA){
+      alert("Total is not equal in Part-A")
+     }
+     else if(this.state.noMatchB){
+      alert("Total is not equal in Part-B")
+     }
+     else if(this.state.noMatchC){
+      alert("Total is not equal in Part-C")
+     }
+     if(this.state.noMatchA||this.state.noMatchB||this.state.noMatchC||this.state.noMatch){
+       this.setState({open:false})
+     }
+     else{
+       this.setState({open:true})
+     }
+    //this.setState({open:true})
 }
 
 handleBlur=(field,id)=>(evt)=>{
