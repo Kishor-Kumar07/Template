@@ -284,7 +284,7 @@ class Parta extends Component {
                             <Label  className="form-control" id="part-a" align="center">PART-A</Label>
                         </Col>
                         <Col md={1}>
-                       { <Button id="button" className="partabut" color="primary" onClick={this.handleAddClick}>Add</Button>}
+                       { <Button id="button" className="partabut" style={{backgroundColor:"purple",variant:"fixed"}} onClick={this.handleAddClick}>Add</Button>}
                        </Col>
                         <Col md={3} className="offset-md-1">
                             <Input type="number" className="form-control"

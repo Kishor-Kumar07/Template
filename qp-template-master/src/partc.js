@@ -513,24 +513,16 @@ handleBlurSubQp=(field,index,subid)=>(evt)=>{
               </Col>
           </Row>
           <Row className="form-group row-align">
-              <Col md={6} className=" offset-md-1">
-              <Label >{this.props.header.subject}</Label>
-              </Col>
+              <Label style={{textAlign:'center'}}>{this.props.header.subject}</Label>
           </Row>
-          <Row className="form-group row-align">
-              <Col md={6} className=" offset-md-3">
-              <Label >{this.props.header.semester}</Label>
-              </Col>
+          <Row className="form-group row-align">              
+              <Label style={{textAlign:'center'}}>{this.props.header.semester}</Label>            
           </Row>
-          <Row className="form-group row-align">
-              <Col md={6} className=" offset-md-1">
-              <Label >{this.props.header.course}</Label>
-              </Col>
+          <Row className="form-group row-align">              
+              <Label style={{textAlign:'center'}}>{this.props.header.course}</Label>
           </Row>
-          <Row className="form-group row-align">
-              <Col md={6} className=" offset-md-3">
-              <Label >{this.props.header.regulation}</Label>
-              </Col>
+          <Row className="form-group row-align">             
+              <Label style={{textAlign:'center'}}>{this.props.header.regulation}</Label>
           </Row>
           <Row className="form-group">
               <Col md={3} className="offset-md-1">
@@ -538,50 +530,45 @@ handleBlurSubQp=(field,index,subid)=>(evt)=>{
               </Col>
               <Col md={1} className="offset-md-6">
               <Label >{this.props.header.marks}</Label>
-              
               </Col>
           </Row>
 
-            <Row className="form-group row-align">
-                        <Col md={3} className="offset-md-4">
-                            <Label ><b>PART-A</b></Label>
-                        </Col>
-                        <Col md={3} className="offset-md-1">
-                         <Label>{this.props.totala}</Label>
-                        </Col>
-                        
+            <Row className="form-group row-align">                        
+                            <Label style={{textAlign:'center'}}><b>PART-A</b></Label>                       
+                          <Label>({this.props.totala})</Label> 
                 </Row>
             {
               this.props.sab.qp.map((x,id) => {
               return(
                 <div>
                 <Row>
-                <Col md={1}>
+                <Col md={1} className="offset-md-1">
                 {this.props.sab.qp[id].subqp.length!==0?<Label style={{textAlign:'right'}}>
                   {1+id+"."+this.state.sub[0]+")"}</Label>
                 :<Label style={{textAlign:'right'}}>{1+id}</Label>}
                  
               </Col>
-                  <Col md={10}>
+                  <Col md={8}>
                   
                      <Math ques={x.question}/>
-                     <img style={{paddingLeft:'20px'}}height="300px" src={x.imagePreviewUrl} />
+                     <img style={{padding:'15px',paddingLeft:'55px',alignItems:'center',justifyContent:'center'}}height="200px" src={x.imagePreviewUrl} />
               </Col>
               <Col md={1}>
                   <Label>{x.mark}</Label>
               </Col>
               </Row>
               
+              
                 {this.props.sab.qp[id].subqp.map((xb,subid)=>{
                    return(
                     <Row>
-                    <Col md={1}>
+                    <Col md={1} className="offset-md-1">
                   <Label>{1+id+"."+this.state.sub[subid+1]+")"}</Label>
               </Col>
                     <Col md={8}>
                     
                         <Label><Math ques={xb.question}/></Label>
-                        <img style={{paddingLeft:'20px'}}height="300px" src={xb.imagePreviewUrl} />
+                        <img style={{padding:'15px',paddingLeft:'55px',alignItems:'center',justifyContent:'center'}}height="200px" src={xb.imagePreviewUrl} />
                 </Col>
                 <Col md={1}>
                     <Label>{xb.mark}</Label>
@@ -597,20 +584,15 @@ handleBlurSubQp=(field,index,subid)=>(evt)=>{
             </div>
             <div>
             <Row className="form-group row-align">
-                        <Col md={3} className="offset-md-4">
-                            <Label ><b>PART-B</b></Label>
-                        </Col>
-                        <Col md={3} className="offset-md-1">
-          <Label>{this.props.totalb}</Label>
-                        </Col>
-                        
+                            <Label style={{textAlign:'center'}} ><b>PART-B</b></Label>                     
+          <Label>({this.props.totalb})</Label>                                 
                 </Row>
             {
               this.props.sb.qp.map((x,id) => {
               return(
                 <div>
                 <Row>
-                <Col md={1}>
+                <Col md={1} className="offset-md-1">
                 {this.props.sb.qp[id].subqp.length!==0?<Label>
                   {this.props.id_a+1+id+"."+this.state.sub[0]+")"}</Label>
                 :<Label>{this.props.id_a+1+id}</Label>}
@@ -619,7 +601,7 @@ handleBlurSubQp=(field,index,subid)=>(evt)=>{
                   <Col md={8}>
                   
                       <Label><Math ques={x.question}/></Label>
-                      <img style={{paddingLeft:'20px'}}height="300px" src={x.imagePreviewUrl} />
+                      <img style={{padding:'15px',paddingLeft:'55px'}}height="200px" src={x.imagePreviewUrl} />
               </Col>
               <Col md={1}>
                   <Label>{x.mark}</Label>
@@ -629,13 +611,13 @@ handleBlurSubQp=(field,index,subid)=>(evt)=>{
                 {this.props.sb.qp[id].subqp.map((xb,subid)=>{
                    return(
                     <Row>
-                    <Col md={1}>
+                    <Col md={1} className="offset-md-1">
                   <Label>{this.props.id_a+1+id+"."+this.state.sub[subid+1]+")"}</Label>
               </Col>
                     <Col md={8}>
                     
                         <Label><Math ques={xb.question}/></Label>
-                        <img style={{paddingLeft:'20px'}}height="300px" src={xb.imagePreviewUrl} />
+                        <img style={{padding:'15px',paddingLeft:'55px'}}height="200px" src={xb.imagePreviewUrl} />
                 </Col>
                 <Col md={1}>
                     <Label>{xb.mark}</Label>
@@ -651,12 +633,8 @@ handleBlurSubQp=(field,index,subid)=>(evt)=>{
             </div>
             <div>
             <Row className="form-group row-align">
-                        <Col md={3} className="offset-md-4">
-                            <Label ><b>PART-C</b></Label>
-                        </Col>
-                        <Col md={3} className="offset-md-1">
-                          <Label>{this.state.total}</Label>
-                        </Col>
+                            <Label style={{textAlign:'center'}}><b>PART-C</b></Label>
+                          <Label>({this.state.total})</Label>
                         
                 </Row>
             {
@@ -664,7 +642,7 @@ handleBlurSubQp=(field,index,subid)=>(evt)=>{
               return(
                 <div>
                 <Row>
-                <Col md={1}>
+                <Col md={1} className="offset-md-1">
                 {this.state.qp[id].subqp.length!==0?<Label>
                   {this.props.idb+1+id+"."+this.state.sub[0]+")"}</Label>
                 :<Label>{this.props.idb+1+id}</Label>}
@@ -673,7 +651,7 @@ handleBlurSubQp=(field,index,subid)=>(evt)=>{
                   <Col md={8}>
                   
                       <Label><Math ques={x.question}/></Label>
-                      <img style={{paddingLeft:'20px'}}height="300px" src={x.imagePreviewUrl} />
+                      <img style={{padding:'15px',paddingLeft:'55px'}}height="200px" src={x.imagePreviewUrl} />
               </Col>
               <Col md={1}>
                   <Label>{x.mark}</Label>
@@ -683,13 +661,13 @@ handleBlurSubQp=(field,index,subid)=>(evt)=>{
                 {this.state.qp[id].subqp.map((xb,subid)=>{
                    return(
                     <Row>
-                    <Col md={1}>
+                    <Col md={1} className="offset-md-1">
                   <Label>{this.props.idb+1+id+"."+this.state.sub[subid+1]+")"}</Label>
               </Col>
                     <Col md={8}>
                     
                         <Label><Math ques={xb.question}/></Label>
-                        <img style={{paddingLeft:'20px'}}height="300px" src={xb.imagePreviewUrl} />
+                        <img style={{padding:'15px',paddingLeft:'55px'}}height="200px" src={xb.imagePreviewUrl} />
                 </Col>
                 <Col md={1}>
                     <Label>{xb.mark}</Label>
@@ -708,7 +686,7 @@ handleBlurSubQp=(field,index,subid)=>(evt)=>{
           
           </Scroll.Element>
           
-          <Button onClick={this.exportPDFWithComponent}>Generate PDF</Button>
+          <Button onClick={this.exportPDFWithComponent} style={{alignItems:'center'}}>Generate PDF</Button>
         </Popup>
         
         </div>
