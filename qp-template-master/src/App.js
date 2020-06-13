@@ -11,15 +11,17 @@ class template extends Component {
     super();
     this.state={
         date:'',
+        rollno:'',
         subject:'',
         semester:'',
         course:'',
         regulation:'',
         time:'',
         marks:'',
-        touched:[
+        touched:
           {
             date:false,
+            rollno:false,
             subject:false,
             semester:false,
             course:false,
@@ -27,15 +29,16 @@ class template extends Component {
             time:false,
             marks:false,
           }
-        ]
+        
       
     }
     this.handleBlur=this.handleBlur.bind(this)
   }
 
-  validate(date,subject,semester,course,regulation,time,marks){
+  validate(date,rollno,subject,semester,course,regulation,time,marks){
     const errors={
       date:'',
+      rollno:'',
       subject:'',
       semester:'',
       course:'',
@@ -46,6 +49,9 @@ class template extends Component {
 
     if(this.state.touched.date&&date=='')
       errors.date="Date should not be empty";
+
+    if(this.state.touched.rollno&&rollno=='')
+      errors.rollno="Rollno should not be empty";
 
     if(this.state.touched.subject&&subject=='')
       errors.subject="Subject should not be empty";
@@ -84,20 +90,28 @@ class template extends Component {
 
   render(){
     
-    const errors=this.validate(this.state.date,this.state.subject,this.state.semester,this.state.course,this.state.regulation,this.state.time,this.state.marks)
+    const errors=this.validate(this.state.date,this.state.rollno,this.state.subject,this.state.semester,this.state.course,this.state.regulation,this.state.time,this.state.marks)
     return(
         <Container>
           
           
           <Form onSubmit={this.handleSubmit} onChange={this.handleChange}>
-          <Row className="form-group row-align">
-              <Col md={3} className=" offset-md-9">
+          <Row className="form-group">
+              <Col md={3}>
                 <Input type="date" className="form-control" style={{textAlign:'center'}} onChange={this.handleChange}
                 onBlur={this.handleBlur('date')}
-                
+              
                 invalid={errors.date!==''}
                  id="date" name="date" placeholder="Date"/>
                  <FormFeedback>{errors.date}</FormFeedback>
+              </Col>
+              <Col md={3} className="offset-md-6">
+                <Input type="rollno" className="form-control" style={{textAlign:'center'}} onChange={this.handleChange}
+                onBlur={this.handleBlur('rollno')}
+                
+                invalid={errors.rollno!==''}
+                 id="rollno" name="rollno" placeholder="Rollno"/>
+                 <FormFeedback>{errors.rollno}</FormFeedback>
               </Col>
               
           </Row>

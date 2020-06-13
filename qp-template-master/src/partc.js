@@ -10,6 +10,7 @@ import Popup from 'reactjs-popup';
 import Mydoc from './mydoc.js';
 import Scroll from 'react-scroll';
 import { PDFExport } from "@progress/kendo-react-pdf";
+import subdivide from './subdivide.png'
 
 var qpaMark=0
 var qpbMark=0
@@ -22,6 +23,7 @@ class Partc extends Component {
    
     this.state={
       subload:false,
+      field:false,
       noMatch:false,
       noMatchA:false,
       noMatchB:false,
@@ -316,9 +318,12 @@ class Partc extends Component {
      }
      if(tot==total_abc){
        this.state.noMatch=false
-       console.log(this.state.noMatch)
+       //console.log(this.state.noMatch)
      }
-     if(this.state.noMatch){
+     if(this.state.field){
+       alert("Some Field is not typed")
+     }
+     else if(this.state.noMatch){
       alert("Total is not equal")
      }
      else if(this.state.noMatchA){
@@ -358,10 +363,35 @@ handleBlurSubQp=(field,index,subid)=>(evt)=>{
     var qpbsubmark=0;
     var qpcmark=0;
     var qpcsubmark=0;
+
+    var head=this.props.header.touched
+
+    if(head.date==false||head.rollno==false||head.subject==false||head.semester==false||
+      head.course==false||head.regulation==false||head.time==false||head.marks==false){
+      this.state.field=true
+    }
+    else{
+      this.state.field=false
+    }
+
     this.props.sab.qp.map((x,id)=>{
      qpamark=qpamark+parseInt(x.mark)
+     if(x.touched.question==false||x.touched.mark==false){
+       this.state.field=true
+     //  console.log(this.state.field)
+     }
+     else{
+       this.state.field=false
+      // console.log(this.state.field)
+     }
      this.props.sab.qp[id].subqp.map((xb,id)=>{
       qpasubmark=qpasubmark+parseInt(xb.mark)
+      if(xb.touched.question==false||xb.touched.mark==false){
+        this.state.field=true
+      }
+      else{
+        this.state.field=false
+      }
      })
     })
     qpaMark=qpamark+qpasubmark
@@ -369,8 +399,20 @@ handleBlurSubQp=(field,index,subid)=>(evt)=>{
     
     this.props.sb.qp.map((x,id)=>{
      qpbmark=qpbmark+parseInt(x.mark)
+     if(x.touched.question==false||x.touched.mark==false){
+      this.state.field=true
+    }
+    else{
+      this.state.field=false
+    }
      this.props.sb.qp[id].subqp.map((xb,id)=>{
       qpbsubmark=qpbsubmark+parseInt(xb.mark)
+      if(xb.touched.question==false||xb.touched.mark==false){
+        this.state.field=true
+      }
+      else{
+        this.state.field=false
+      }
      })
     })
     qpbMark=qpbmark+qpbsubmark
@@ -378,8 +420,20 @@ handleBlurSubQp=(field,index,subid)=>(evt)=>{
    
     this.state.qp.map((x,id)=>{
      qpcmark=qpcmark+parseInt(x.mark)
+     if(x.touched.question==false||x.touched.mark==false){
+      this.state.field=true
+    }
+    else{
+      this.state.field=false
+    }
      this.state.qp[id].subqp.map((xb,id)=>{
       qpcsubmark=qpcsubmark+parseInt(xb.mark)
+      if(xb.touched.question==false||xb.touched.mark==false){
+        this.state.field=true
+      }
+      else{
+        this.state.field=false
+      }
      })
     })
     qpcMark=qpcmark+qpcsubmark
@@ -397,9 +451,9 @@ handleBlurSubQp=(field,index,subid)=>(evt)=>{
                             <Label  className="form-control" id="part-a" align="center">PART-C</Label>
                         </Col>
                         <Col md={1}>
-                       { <Button id="button" className="partabut" color="primary" onClick={this.handleAddClick}>Add</Button>}
+                       { <Button id="button" className="partabut button" style={{backgroundColor:"violet",variant:"fixed"}} onClick={this.handleAddClick}><i class="fa fa-plus" aria-hidden="true"></i></Button>}
                        </Col>
-                        <Col md={3} className="offset-md-1">
+                        <Col md={2} className="offset-md-1">
                             <Input type="number" className="form-control"
                              onBlur={this.handleBlurTotal('total')}
                            
@@ -415,7 +469,7 @@ handleBlurSubQp=(field,index,subid)=>(evt)=>{
                 {this.validateQp(x.question,x.mark,id)}
         <Row className="form-group" key={id}>
         <Col md={1}>
-          {this.state.qp.length !== 1 && x.subqp.length<1 &&<Button onClick={e=>this.submit(e,id)}>Del</Button>}
+          {this.state.qp.length !== 1 && x.subqp.length<1 &&<Button color="danger" onClick={e=>this.submit(e,id)}><i class="fa fa-minus" aria-hidden="true"></i></Button>}
           </Col>
              
              
@@ -429,10 +483,10 @@ handleBlurSubQp=(field,index,subid)=>(evt)=>{
                   <Input name="question" className="form-control" placeholder="Questions"
                       onBlur={this.handleBlur('question',id)}
                       invalid={x.errors.question!=='error'} value={x.question} onChange={e => this.handleInputChange(e, id)}/>
+                      <FormFeedback>{x.errors.question}</FormFeedback><br/>
                   <Math ques={x.question}/>
-                  <FormFeedback>{x.errors.question}</FormFeedback>
-                  <Input type="file" onChange={e=>this._handleImageChange(e,id)} />
-                  <img style={{paddingLeft:'20px'}}height="300px" src={x.imagePreviewUrl} />
+                  <Input type="file" style={{paddingTop: "8px"}} onChange={e=>this._handleImageChange(e,id)} />
+                  <img style={{padding:"15px",paddingLeft:"140px"}} height="300px" src={x.imagePreviewUrl} />
               </Col>
               <Col md={1}>
                 <Input type="number" className="form-control ml10" name="mark" placeholder="M"
@@ -441,14 +495,14 @@ handleBlurSubQp=(field,index,subid)=>(evt)=>{
               <FormFeedback>{x.errors.mark}</FormFeedback>
               </Col>
               <Col md={1}>
-                  {<Button id ="button" className="partabut" onClick={()=>this.handleSubClick(id)}>Sub</Button>}
+                  {<Button id ="button" className="partabut" style={{background:"violet"}} onClick={()=>this.handleSubClick(id)}><img width="26px" src={subdivide} /></Button>}
               </Col>
             </Row>   
             <div>{this.state.qp[id].subqp.map((xb,subid)=><div>
               {this.validateSubQp(xb.question,xb.mark,id,subid)}
               <Row className="form-group" key={id}>
               <Col md={1}>
-              {<Button onClick={e=>this.submitsub(e,id,subid)}>Del</Button>}
+              {<Button color="danger" onClick={e=>this.submitsub(e,id,subid)}><i class="fa fa-minus" aria-hidden="true"></i></Button>}
               </Col>
               <Col md={1}>
                   <Label type="number" className="form-control" id="q_no" name="id">{this.props.idb+1+id+"."+this.state.sub[subid+1]+")"}</Label>
@@ -457,10 +511,10 @@ handleBlurSubQp=(field,index,subid)=>(evt)=>{
                   <Input name="question" className="form-control" placeholder="Questions"
                       onBlur={this.handleBlurSubQp("question",id,subid)}
                       invalid={xb.errors.question!=='error'} value={xb.question} onChange={e => this.handleInputsubChange(e, id, subid)}/>
-                     <FormFeedback>{xb.errors.question}</FormFeedback>
+                     <FormFeedback>{xb.errors.question}</FormFeedback><br/>
                       <Math ques={xb.question}/>
-                      <Input type="file" onChange={e=>this._handleImageSubChange(e,id,subid)} />
-                  <img style={{paddingLeft:'20px'}}height="300px" src={xb.imagePreviewUrl} />
+                      <Input type="file" style={{paddingTop: "8px"}} onChange={e=>this._handleImageSubChange(e,id,subid)} />
+                  <img style={{padding:"15px",paddingLeft:"140px"}} height="300px" src={xb.imagePreviewUrl} />
               </Col>
               <Col md={1}>
                   <Input type="number" className="form-control ml10" name="mark" placeholder="M"
@@ -469,7 +523,7 @@ handleBlurSubQp=(field,index,subid)=>(evt)=>{
               <FormFeedback>{xb.errors.mark}</FormFeedback>
               </Col>
               <Col md={1}>
-                  {<Button id ="button" className="partabut" onClick={()=>this.handleSubClick(id)}>Sub</Button>}
+                  {<Button id ="button" className="partabut" style={{background:"violet"}} onClick={()=>this.handleSubClick(id)}><img width="26px" src={subdivide} /></Button>}
               </Col>
                   </Row></div>)}</div>
         </div>    
@@ -479,10 +533,11 @@ handleBlurSubQp=(field,index,subid)=>(evt)=>{
       <hr/>  
       {this.handlecheck()}
        <div>
-         
-        <button className="button" onClick={this.onClick}>
-          Preview
-        </button>
+         <Row>
+           <Col className="preview">
+            <Button className="button col-md-2 offset-md-5" onClick={this.onClick}>Preview</Button>
+          </Col>
+        </Row>
        
         <Popup
           open={this.state.open}
@@ -507,216 +562,194 @@ handleBlurSubQp=(field,index,subid)=>(evt)=>{
         >
             <div>
             
-            <Row className="form-group row-align">
-              <Col md={3} className=" offset-md-9">
-                <Label >{this.props.header.date}</Label>
+            <Row className="form-group">
+              <Col md={3}>
+                <Label >{"Date : "+this.props.header.date}</Label>
+              </Col>
+              <Col md={3} className="offset-md-6">
+                <Label >{"Rollno : "+this.props.header.rollno}</Label>
               </Col>
           </Row>
           <Row className="form-group row-align">
-              <Col md={6} className=" offset-md-1">
-              <Label >{this.props.header.subject}</Label>
-              </Col>
+          <Label style={{textAlign:'center'}}>{"Subject : "+this.props.header.subject}</Label>
           </Row>
-          <Row className="form-group row-align">
-              <Col md={6} className=" offset-md-3">
-              <Label >{this.props.header.semester}</Label>
-              </Col>
+          <Row className="form-group row-align"> 
+          <Label style={{textAlign:'center'}}>{"Semester : "+this.props.header.semester}</Label> 
           </Row>
-          <Row className="form-group row-align">
-              <Col md={6} className=" offset-md-1">
-              <Label >{this.props.header.course}</Label>
-              </Col>
+          <Row className="form-group row-align"> 
+          <Label style={{textAlign:'center'}}>{"Course : "+this.props.header.course}</Label>
           </Row>
-          <Row className="form-group row-align">
-              <Col md={6} className=" offset-md-3">
-              <Label >{this.props.header.regulation}</Label>
-              </Col>
+          <Row className="form-group row-align"> 
+          <Label style={{textAlign:'center'}}>{"Regulation : "+this.props.header.regulation}</Label>
           </Row>
           <Row className="form-group">
-              <Col md={3} className="offset-md-1">
-              <Label >{this.props.header.time}</Label>
-              </Col>
-              <Col md={1} className="offset-md-6">
-              <Label >{this.props.header.marks}</Label>
-              
-              </Col>
+          <Col md={3} className="offset-md-1">
+          <Label >{"Time :"+this.props.header.time}</Label>
+          </Col>
+          <Col md={2} className="offset-md-5">
+          <Label >{"Marks : "+this.props.header.marks}</Label>
+          </Col>
           </Row>
 
-            <Row className="form-group row-align">
-                        <Col md={3} className="offset-md-4">
-                            <Label ><b>PART-A</b></Label>
-                        </Col>
-                        <Col md={3} className="offset-md-1">
-                         <Label>{this.props.totala}</Label>
-                        </Col>
-                        
-                </Row>
+            <Row className="form-group row-align"> 
+            <Label style={{textAlign:'center'}}><b>PART-A</b></Label> 
+            <Label>({this.props.totala})</Label> 
+            </Row>
             {
-              this.props.sab.qp.map((x,id) => {
-              return(
-                <div>
-                <Row>
-                <Col md={1}>
-                {this.props.sab.qp[id].subqp.length!==0?<Label style={{textAlign:'right'}}>
-                  {1+id+"."+this.state.sub[0]+")"}</Label>
-                :<Label style={{textAlign:'right'}}>{1+id}</Label>}
-                 
-              </Col>
-                  <Col md={10}>
-                  
-                     <Math ques={x.question}/>
-                     <img style={{paddingLeft:'20px'}}height="300px" src={x.imagePreviewUrl} />
-              </Col>
-              <Col md={1}>
-                  <Label>{x.mark}</Label>
-              </Col>
-              </Row>
-              
-                {this.props.sab.qp[id].subqp.map((xb,subid)=>{
-                   return(
-                    <Row>
-                    <Col md={1}>
-                  <Label>{1+id+"."+this.state.sub[subid+1]+")"}</Label>
-              </Col>
-                    <Col md={8}>
-                    
-                        <Label><Math ques={xb.question}/></Label>
-                        <img style={{paddingLeft:'20px'}}height="300px" src={xb.imagePreviewUrl} />
-                </Col>
-                <Col md={1}>
-                    <Label>{xb.mark}</Label>
-                </Col>
-                </Row>
-                   );
-                })}
-              
-              </div>
-              );
+            this.props.sab.qp.map((x,id) => {
+            return(
+            <div>
+            <Row>
+            <Col md={1} className="offset-md-1">
+            {this.props.sab.qp[id].subqp.length!==0?<Label style={{textAlign:'right'}}>
+            {1+id+"."+this.state.sub[0]+")"}</Label>
+            :<Label style={{textAlign:'right'}}>{1+id}</Label>}
+            
+            </Col>
+            <Col md={8}>
+            
+            <Math ques={x.question}/>
+            <img style={{padding:'15px',paddingLeft:'55px',alignItems:'center',justifyContent:'center'}}height="200px" src={x.imagePreviewUrl} />
+            </Col>
+            <Col md={1}>
+            <Label>({x.mark})</Label>
+            </Col>
+            </Row>
+            
+            
+            {this.props.sab.qp[id].subqp.map((xb,subid)=>{
+            return(
+            <Row>
+            <Col md={1} className="offset-md-1">
+            <Label>{1+id+"."+this.state.sub[subid+1]+")"}</Label>
+            </Col>
+            <Col md={8}>
+            
+            <Label><Math ques={xb.question}/></Label>
+            <img style={{padding:'15px',paddingLeft:'55px',alignItems:'center',justifyContent:'center'}}height="200px" src={xb.imagePreviewUrl} />
+            </Col>
+            <Col md={1}>
+            <Label>({xb.mark})</Label>
+            </Col>
+            </Row>
+            );
+            })}
+            
+            </div>
+            );
             })
             }
             </div>
             <div>
             <Row className="form-group row-align">
-                        <Col md={3} className="offset-md-4">
-                            <Label ><b>PART-B</b></Label>
-                        </Col>
-                        <Col md={3} className="offset-md-1">
-          <Label>{this.props.totalb}</Label>
-                        </Col>
-                        
-                </Row>
+            <Label style={{textAlign:'center'}} ><b>PART-B</b></Label> 
+            <Label>({this.props.totalb})</Label> 
+            </Row>
             {
-              this.props.sb.qp.map((x,id) => {
-              return(
-                <div>
-                <Row>
-                <Col md={1}>
-                {this.props.sb.qp[id].subqp.length!==0?<Label>
-                  {this.props.id_a+1+id+"."+this.state.sub[0]+")"}</Label>
-                :<Label>{this.props.id_a+1+id}</Label>}
-                 
-              </Col>
-                  <Col md={8}>
-                  
-                      <Label><Math ques={x.question}/></Label>
-                      <img style={{paddingLeft:'20px'}}height="300px" src={x.imagePreviewUrl} />
-              </Col>
-              <Col md={1}>
-                  <Label>{x.mark}</Label>
-              </Col>
-              </Row>
-              
-                {this.props.sb.qp[id].subqp.map((xb,subid)=>{
-                   return(
-                    <Row>
-                    <Col md={1}>
-                  <Label>{this.props.id_a+1+id+"."+this.state.sub[subid+1]+")"}</Label>
-              </Col>
-                    <Col md={8}>
-                    
-                        <Label><Math ques={xb.question}/></Label>
-                        <img style={{paddingLeft:'20px'}}height="300px" src={xb.imagePreviewUrl} />
-                </Col>
-                <Col md={1}>
-                    <Label>{xb.mark}</Label>
-                </Col>
-                </Row>
-                   );
-                })}
-              
-              </div>
-              );
+            this.props.sb.qp.map((x,id) => {
+            return(
+            <div>
+            <Row>
+            <Col md={1} className="offset-md-1">
+            {this.props.sb.qp[id].subqp.length!==0?<Label>
+            {this.props.id_a+1+id+"."+this.state.sub[0]+")"}</Label>
+            :<Label>{this.props.id_a+1+id}</Label>}
+            
+            </Col>
+            <Col md={8}>
+            
+            <Label><Math ques={x.question}/></Label>
+            <img style={{padding:'15px',paddingLeft:'55px'}}height="200px" src={x.imagePreviewUrl} />
+            </Col>
+            <Col md={1}>
+            <Label>({x.mark})</Label>
+            </Col>
+            </Row>
+            
+            {this.props.sb.qp[id].subqp.map((xb,subid)=>{
+            return(
+            <Row>
+            <Col md={1} className="offset-md-1">
+            <Label>{this.props.id_a+1+id+"."+this.state.sub[subid+1]+")"}</Label>
+            </Col>
+            <Col md={8}>
+            
+            <Label><Math ques={xb.question}/></Label>
+            <img style={{padding:'15px',paddingLeft:'55px'}}height="200px" src={xb.imagePreviewUrl} />
+            </Col>
+            <Col md={1}>
+            <Label>({xb.mark})</Label>
+            </Col>
+            </Row>
+            );
+            })}
+            
+            </div>
+            );
             })
             }
             </div>
             <div>
             <Row className="form-group row-align">
-                        <Col md={3} className="offset-md-4">
-                            <Label ><b>PART-C</b></Label>
-                        </Col>
-                        <Col md={3} className="offset-md-1">
-                          <Label>{this.state.total}</Label>
-                        </Col>
-                        
-                </Row>
+            <Label style={{textAlign:'center'}}><b>PART-C</b></Label>
+            <Label>({this.state.total})</Label>
+            
+            </Row>
             {
-              this.state.qp.map((x,id) => {
-              return(
-                <div>
-                <Row>
-                <Col md={1}>
-                {this.state.qp[id].subqp.length!==0?<Label>
-                  {this.props.idb+1+id+"."+this.state.sub[0]+")"}</Label>
-                :<Label>{this.props.idb+1+id}</Label>}
-                 
-              </Col>
-                  <Col md={8}>
-                  
-                      <Label><Math ques={x.question}/></Label>
-                      <img style={{paddingLeft:'20px'}}height="300px" src={x.imagePreviewUrl} />
-              </Col>
-              <Col md={1}>
-                  <Label>{x.mark}</Label>
-              </Col>
-              </Row>
-              
-                {this.state.qp[id].subqp.map((xb,subid)=>{
-                   return(
-                    <Row>
-                    <Col md={1}>
-                  <Label>{this.props.idb+1+id+"."+this.state.sub[subid+1]+")"}</Label>
-              </Col>
-                    <Col md={8}>
-                    
-                        <Label><Math ques={xb.question}/></Label>
-                        <img style={{paddingLeft:'20px'}}height="300px" src={xb.imagePreviewUrl} />
-                </Col>
-                <Col md={1}>
-                    <Label>{xb.mark}</Label>
-                </Col>
-                </Row>
-                   );
-                })}
-              
-              </div>
-              );
+            this.state.qp.map((x,id) => {
+            return(
+            <div>
+            <Row>
+            <Col md={1} className="offset-md-1">
+            {this.state.qp[id].subqp.length!==0?<Label>
+            {this.props.idb+1+id+"."+this.state.sub[0]+")"}</Label>
+            :<Label>{this.props.idb+1+id}</Label>}
+            
+            </Col>
+            <Col md={8}>
+            
+            <Label><Math ques={x.question}/></Label>
+            <img style={{padding:'15px',paddingLeft:'55px'}}height="200px" src={x.imagePreviewUrl} />
+            </Col>
+            <Col md={1}>
+            <Label>({x.mark})</Label>
+            </Col>
+            </Row>
+            
+            {this.state.qp[id].subqp.map((xb,subid)=>{
+            return(
+            <Row>
+            <Col md={1} className="offset-md-1">
+            <Label>{this.props.idb+1+id+"."+this.state.sub[subid+1]+")"}</Label>
+            </Col>
+            <Col md={8}>
+            
+            <Label><Math ques={xb.question}/></Label>
+            <img style={{padding:'15px',paddingLeft:'55px'}}height="200px" src={xb.imagePreviewUrl} />
+            </Col>
+            <Col md={1}>
+            <Label>({xb.mark})</Label>
+            </Col>
+            </Row>
+            );
+            })}
+            
+            </div>
+            );
             })
             }
-                </div>
-                </PDFExport>
-          </div>
-          
-          </Scroll.Element>
-          
-          <Button onClick={this.exportPDFWithComponent}>Generate PDF</Button>
-        </Popup>
-        
-        </div>
-      
-    </div>
-    );
-  }}
- 
+            </div>
+            </PDFExport>
+            </div>
+            
+            </Scroll.Element>
+            
+            <Button onClick={this.exportPDFWithComponent} style={{alignItems:'center'}}>Generate PDF</Button>
+            </Popup>
+            
+            </div>
+            
+            </div>
+            );
+            }}
 export default Partc;
-
-

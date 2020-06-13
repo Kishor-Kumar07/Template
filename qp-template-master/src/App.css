@@ -6,6 +6,16 @@
     border-color: white;
   }
 
+  .preview{
+    padding-left: 30px;
+  }
+
+  .button{
+    background-color: violet;
+  }
+  
+
+
   .row-align{
     justify-content: center;
   }
