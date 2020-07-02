@@ -5,6 +5,7 @@ import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import Math from './math' 
 import 'katex/dist/katex.min.css';
+import subdivide from './subdivide.png'
 
 class Partb extends Component {
   constructor(){
@@ -267,9 +268,9 @@ class Partb extends Component {
                               <Label  className="form-control" id="part-a" align="center">PART-B</Label>
                           </Col>
                           <Col md={1}>
-                         { <Button id="button" className="partabut" color="primary" onClick={this.handleAddClick}>Add</Button>}
+                         { <Button id="button" className="partabut button" style={{backgroundColor:"violet",variant:"fixed"}} onClick={this.handleAddClick}><i class="fa fa-plus" aria-hidden="true"></i></Button>}
                          </Col>
-                          <Col md={3} className="offset-md-1">
+                          <Col md={2} className="offset-md-1">
                               <Input type="number" className="form-control"
                               onBlur={this.handleBlurTotal('total')}
                            
@@ -285,7 +286,7 @@ class Partb extends Component {
                   {this.validateQp(x.question,x.mark,id)}
           <Row className="form-group" key={id}>
           <Col md={1}>
-          {this.state.qp.length !== 1 && x.subqp.length<1 &&<Button onClick={e=>this.submit(e,id)}>Del</Button>}
+          {this.state.qp.length !== 1 && x.subqp.length<1 &&<Button color="danger" onClick={e=>this.submit(e,id)}><i class="fa fa-minus" aria-hidden="true"></i></Button>}
           </Col>
              
                 <Col md={1}>
@@ -298,10 +299,10 @@ class Partb extends Component {
                     <Input name="question" className="form-control" placeholder="Questions"
                         onBlur={this.handleBlur('question',id)}
                         invalid={x.errors.question!=='error'} value={x.question} onChange={e => this.handleInputChange(e, id)}/>
+                        <FormFeedback>{x.errors.question}</FormFeedback><br/>
                     <Math ques={x.question}/>
-                    <FormFeedback>{x.errors.question}</FormFeedback>
-                    <Input type="file" onChange={e=>this._handleImageChange(e,id)} />
-                  <img style={{paddingLeft:'20px'}}height="300px" src={x.imagePreviewUrl} />
+                    <Input type="file" style={{paddingTop: "8px"}} onChange={e=>this._handleImageChange(e,id)} />
+                  <img style={{padding:"15px",paddingLeft:"140px"}} height="300px" src={x.imagePreviewUrl} />
                 </Col>
                 <Col md={1}>
                   <Input type="number" className="form-control ml10" name="mark" placeholder="M"
@@ -310,14 +311,14 @@ class Partb extends Component {
                 <FormFeedback>{x.errors.mark}</FormFeedback>
                 </Col>
                 <Col md={1}>
-                    {<Button id ="button" className="partabut" onClick={()=>this.handleSubClick(id)}>Sub</Button>}
+                    {<Button id ="button" className="partabut" style={{background:"violet"}} onClick={()=>this.handleSubClick(id)}><img width="26px" src={subdivide} /></Button>}
                 </Col>
               </Row>   
               <div>{this.state.qp[id].subqp.map((xb,subid)=><div>
                 {this.validateSubQp(xb.question,xb.mark,id,subid)}
                 <Row className="form-group" key={id}>
                 <Col md={1}>
-                {<Button onClick={e=>this.submitsub(e,id,subid)}>Del</Button>}
+                {<Button color="danger" onClick={e=>this.submitsub(e,id,subid)}><i class="fa fa-minus" aria-hidden="true"></i></Button>}
                 </Col>
                 <Col md={1}>
                     <Label type="number" className="form-control" id="q_no" name="id">{this.props.id+1+id+"."+this.state.sub[subid+1]+")"}</Label>
@@ -326,10 +327,10 @@ class Partb extends Component {
                     <Input name="question" className="form-control" placeholder="Questions"
                         onBlur={this.handleBlurSubQp("question",id,subid)}
                         invalid={xb.errors.question!=='error'} value={xb.question} onChange={e => this.handleInputsubChange(e, id, subid)}/>
-                       <FormFeedback>{xb.errors.question}</FormFeedback>
+                       <FormFeedback>{xb.errors.question}</FormFeedback><br/>
                         <Math ques={xb.question}/>
-                        <Input type="file" onChange={e=>this._handleImageSubChange(e,id,subid)} />
-                  <img style={{paddingLeft:'20px'}}height="300px" src={xb.imagePreviewUrl} />
+                        <Input type="file" style={{paddingTop: "8px"}} onChange={e=>this._handleImageSubChange(e,id,subid)} />
+                  <img style={{padding:"15px",paddingLeft:"140px"}} height="300px" src={xb.imagePreviewUrl} />
                 </Col>
                 <Col md={1}>
                     <Input type="number" className="form-control ml10" name="mark" placeholder="M"
@@ -338,7 +339,7 @@ class Partb extends Component {
                 <FormFeedback>{xb.errors.mark}</FormFeedback>
                 </Col>
                 <Col md={1}>
-                    {<Button id ="button" className="partabut" onClick={()=>this.handleSubClick(id)}>Sub</Button>}
+                    {<Button id ="button" className="partabut" style={{background:"violet"}} onClick={()=>this.handleSubClick(id)}><img width="26px" src={subdivide} /></Button>}
                 </Col>
                     </Row></div>)}</div>
           </div>    
